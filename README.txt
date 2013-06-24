@@ -31,4 +31,4 @@ Test:
 2	Show map swingmap/index.php
 	ex: swingmap/index.php?device=ios&server=A&interval=100	Default: interval=60 seconds
 	
-Any questions, please email to yliang@swingmobility.com
+Any questions, please email to yliang@swingmobility.com / alex19891013@gmail.com
