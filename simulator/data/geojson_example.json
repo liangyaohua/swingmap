@@ -1,0 +1,105 @@
+setMarkers({
+	"type": "FeatureCollection",
+ 	 "features": [
+    		{
+				"type":"Feature",
+				"geometry": {"type": "Point", "coordinates": [2.719961, 48.317383,12.11]},
+				"properties":{
+					"time": "13-06-2013 10:10:10",
+					"ip": "192.163.0.1",
+					"device": "ios",
+					"idClient": "ABC001",
+					"idServer": "A",
+					"volume": 1024
+				}
+			},{
+				"type":"Feature",
+				"geometry": {"type": "Point", "coordinates": [3.719961, 50.317383,12.11]},
+				"properties":{
+					"time": "13-06-2013 10:10:10",
+					"ip": "192.163.0.2",
+					"device": "ios",
+					"idClient": "ABC002",
+					"idServer": "B",
+					"volume": 3367
+				}
+			},{
+				"type":"Feature",
+				"geometry": {"type": "Point", "coordinates": [6.719961, 47.317383,12.11]},
+				"properties":{
+					"time": "13-06-2013 10:10:10",
+					"ip": "192.163.0.3",
+					"device": "ios",
+					"idClient": "ABC003",
+					"idServer": "C",
+					"volume": 7067
+				}
+			},{
+				"type":"Feature",
+				"geometry": {"type": "Point", "coordinates": [0.719961, 45.317383,12.11]},
+				"properties":{
+					"time": "13-06-2013 10:10:10",
+					"ip": "192.163.0.4",
+					"device": "android",
+					"idClient": "ABC004",
+					"idServer": "A",
+					"volume": 2753
+				}
+			},{
+				"type":"Feature",
+				"geometry": {"type": "Point", "coordinates": [4.719961, 45.317383,12.11]},
+				"properties":{
+					"time": "13-06-2013 10:10:10",
+					"ip": "192.163.0.5",
+					"device": "android",
+					"idClient": "ABC005",
+					"idServer": "B",
+					"volume": 8123
+				}
+			},{
+				"type":"Feature",
+				"geometry": {"type": "Point", "coordinates": [-0.419961, 48.817383,12.11]},
+				"properties":{
+					"time": "13-06-2013 10:10:10",
+					"ip": "192.163.0.6",
+					"device": "android",
+					"idClient": "ABC006",
+					"idServer": "C",
+					"volume": 3523
+				}
+			},{
+				"type":"Feature",
+				"geometry": {"type": "Point", "coordinates": [1.719961, 44.317383,12.11]},
+				"properties":{
+					"time": "13-06-2013 10:10:10",
+					"ip": "192.163.0.7",
+					"device": "wp",
+					"idClient": "ABC007",
+					"idServer": "A",
+					"volume": 5024
+				}
+			},{
+				"type":"Feature",
+				"geometry": {"type": "Point", "coordinates": [2.719961, 50.317383,12.11]},
+				"properties":{
+					"time": "13-06-2013 10:10:10",
+					"ip": "192.163.0.8",
+					"device": "wp",
+					"idClient": "ABC008",
+					"idServer": "B",
+					"volume": 3024
+				}
+			},{
+				"type":"Feature",
+				"geometry": {"type": "Point", "coordinates": [5.719961, 46.317383,12.11]},
+				"properties":{
+					"time": "13-06-2013 10:10:10",
+					"ip": "192.163.0.9",
+					"device": "wp",
+					"idClient": "ABC009",
+					"idServer": "C",
+					"volume": 40240
+				}
+			}
+		]
+	})
