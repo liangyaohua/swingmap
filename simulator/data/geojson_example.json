@@ -1,6 +1,6 @@
 setMarkers({
 	"type": "FeatureCollection",
- 	 "features": [
+ 	"features": [
     		{
 				"type":"Feature",
 				"geometry": {"type": "Point", "coordinates": [2.719961, 48.317383,12.11]},

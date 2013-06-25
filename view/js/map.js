@@ -35,27 +35,32 @@ function setMarkers(results){
 		// Get user
 		var User = results.features[i];
 		// User's informations
-		var lat = User.geometry.coordinates[1];
-		var lng = User.geometry.coordinates[0];
-		var time = User.properties.time;
-		var ip = User.properties.ip;
-		var device = User.properties.device;
-		var idClient = User.properties.idClient;
-		var idServer = User.properties.idServer;
-		var volume = User.properties.volume;
-		// Create marker
-		var latLng = new google.maps.LatLng(lat,lng);
-		var marker = new google.maps.Marker({
-			position: latLng,
-			map: map,
-			icon: getCircle(volume, device)
-		});
-		// Content of infoWindow
-		var contentString = '<p>cordinates: [' + lat + ', ' + lng + ']</p><p>time: ' + time + '</p><p>ip: ' + ip + '</p><p>device: ' + device + '</p><p>idClient: ' + idClient + '</p><p>idServer: ' + idServer + '</p><p>volume: ' + volume + '</p>';
-	
-		bindInfoWindow(marker, map, infoWindow,contentString);
+		addMarker(User);
     }
 	alert("Total users: " + results.features.length);
+}
+
+// function for adding a marker
+function addMarker(User) {
+	var lat = User.geometry.coordinates[1];
+	var lng = User.geometry.coordinates[0];
+	var time = User.properties.time;
+	var ip = User.properties.ip;
+	var device = User.properties.device;
+	var idClient = User.properties.idClient;
+	var idServer = User.properties.idServer;
+	var volume = User.properties.volume;
+	// Create marker
+	var latLng = new google.maps.LatLng(lat,lng);
+	var marker = new google.maps.Marker({
+		position: latLng,
+		map: map,
+		icon: getCircle(volume, device)
+	});
+	// Content of infoWindow
+	var contentString = '<p>cordinates: [' + lat + ', ' + lng + ']</p><p>time: ' + time + '</p><p>ip: ' + ip + '</p><p>device: ' + device + '</p><p>idClient: ' + idClient + '</p><p>idServer: ' + idServer + '</p><p>volume: ' + volume + '</p>';
+	
+	bindInfoWindow(marker, map, infoWindow,contentString);	
 }
 
 // Bind the infoWindows to the markers
