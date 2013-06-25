@@ -3,7 +3,7 @@ var map_id; // "map_canvas"
 var map_zoom; // 6
 var map_center_lat; // 48.583 Strasbourg
 var map_center_lng; // 7.750
-var geojson; // "http://localhost/swingmap/model/genjson.php?device=&server="
+var geojson; // "http://hostname/swingmap/model/genjson.php?device=&server="
 var infoWindow = new google.maps.InfoWindow;
 var styles;
 
@@ -60,9 +60,12 @@ function setMarkers(results){
 
 // Bind the infoWindows to the markers
 function bindInfoWindow(marker, map, infoWindow, contentString) {
-	google.maps.event.addListener(marker, 'click', function() {
+	google.maps.event.addListener(marker, 'mouseover', function() {
 		infoWindow.setContent(contentString);
 		infoWindow.open(map, marker);
+	});
+	google.maps.event.addListener(marker, 'mouseout', function() {
+		infoWindow.close();
 	});
 }
 

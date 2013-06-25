@@ -1,26 +1,8 @@
 <?php
-	include_once('./dbinfo.php');
-	
-	$_device = isset($_GET['device'])?$_GET['device']:"";
-	$_server = isset($_GET['server'])?$_GET['server']:"";
-	$_interval = isset($_GET['interval'])?$_GET['interval']:"60";
-	
+function get_geojson($_device, $_server, $_interval){
+	global $connection;
 	$device_array = array("ios", "android", "wp");
 	$server_array = array("A", "B", "C", "D");
-	
-	if(!in_array($_device, $device_array) && $_device != ""){
-		die("Device not exist: ".$_device);
-	}
-	if(!in_array($_server, $server_array) && $_server != ""){
-		die("Server not exist: ".$_server);
-	}
-	
-	// Opens a connection to a MySQL server
-	try {
-		$connection = new PDO('mysql:host='.$host.';port='.$port.';dbname='.$database, $username, $password);
-	} catch (PDOException $e) {
-		die('Connection failed: '.$e->getMessage()."\n");
-	}
 	
 	if(in_array($_device, $device_array) && in_array($_server, $server_array)){
 		$sql = "select time, lat, lng, ip, device, idClient, idServer, volume from marker where device = :device and idServer = :idServer and time > DATE_SUB(now(), INTERVAL :interval SECOND)";
@@ -63,5 +45,8 @@
 		array_push($features, $feature);
 	}
 	$Markers = array("type" => "FeatureCollection", "features" => $features);
-	echo "setMarkers(".json_encode($Markers).")";
+	$function_name = "setMarkers";
+	$geojson =  $function_name."(".json_encode($Markers).")";
+	return $geojson;
+}
 ?>

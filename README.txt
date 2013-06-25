@@ -3,18 +3,20 @@ SwingMap V1.0
 swingmap
 	- index.php			
 	- config.php
+	- model
+		- db_connection.php	// database connection info
+		- get_geojson.php	// function of generating the geojson object
 	- view
 		- map.htm		// interface, set the parameters for the map functions	
 		- js
-			- jquery.js	// for the future use
 			- map.js	// map functions 
+			- jquery.js	// for the future use	
 		- css
 			- map.css
 		- images
 			- favicon.png
-	- model
-		- dbinfo.php	// database connection info
-		- geojson.php	// connect the database and generate geojson object
+	- controller
+		- geojson.php	// get the requested geojson
 	- simulator
 		- index.php		
 		- data
@@ -31,4 +33,4 @@ Test:
 2	Show map swingmap/index.php
 	ex: swingmap/index.php?device=ios&server=A&interval=100	Default: interval=60 seconds
 	
-Any questions, please email to yliang@swingmobility.com / alex19891013@gmail.com
+Any questions, please email to yliang@swingmobility.com

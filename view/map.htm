@@ -13,6 +13,8 @@
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/map.js"></script>
     <script type="text/javascript">
+		//google.maps.visualRefresh = true;
+
 		var map_id = "map_canvas";
 		var map_zoom = 6;
 		var map_center_lat = 48.583;
@@ -51,7 +53,7 @@
 		}
 		];
 		
-		var geojson = "<?php echo HOST;?>/model/geojson.php?device=<?php echo $_device;?>&server=<?php echo $_server;?>&interval=<?php echo $_interval;?>";
+		var geojson = "<?php echo HOST;?>/controller/geojson.php?device=<?php echo $_device;?>&server=<?php echo $_server;?>&interval=<?php echo $_interval;?>";
 
 		google.maps.event.addDomListener(window, 'load', initialize);
     </script>

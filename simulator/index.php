@@ -1,14 +1,7 @@
 <?php
 	date_default_timezone_set('Europe/Paris');
-	include_once('../model/dbinfo.php');
+	include_once('../model/db_connection.php');
 	$max = (isset($_GET['max']) && $_GET['max'] != "")?$_GET['max']:100;
-	
-	// Opens a connection to a MySQL server
-	try {
-		$connection = new PDO('mysql:host='.$host.';port='.$port.';dbname='.$database, $username, $password);
-	} catch (PDOException $e) {
-		die('Connection failed: '.$e->getMessage()."\n");
-	}
 		
 	$query = "insert into marker (time,lat,lng,ip,device,idClient,idServer,volume,idIP_Coordinate,idClient_Coordinate) values ";
 
