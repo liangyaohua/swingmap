@@ -32,5 +32,7 @@ Test:
 	ex: swingmap/simulator/index.php?max= a number	Default: max=100
 2	Show map swingmap/index.php
 	ex: swingmap/index.php?device=ios&server=A&interval=100	Default: interval=60 seconds
+
+DEMO: http://www.liangyaohua.com/swingmap
 	
 Any questions, please email to yliang@swingmobility.com
