@@ -1,7 +1,7 @@
 <?php
 function get_geojson($_device, $_server, $_interval){
 	global $connection;
-	$device_array = array("ios", "android", "wp");
+	$device_array = array("ios", "android", "wp", "server");
 	$server_array = array("A", "B", "C", "D");
 	
 	if(in_array($_device, $device_array) && in_array($_server, $server_array)){

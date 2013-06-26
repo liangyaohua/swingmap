@@ -29,12 +29,13 @@
 	echo "<script language='Javascript'> alert('Insertion success: ".$result." messages'); </script>";
 
 	function genDevice(){
-		$num = rand(1,3);
+		$num = rand(1,4);
 		switch($num)
 		{
 			case 1:	return "ios"; break;
 			case 2: return "android"; break;
 			case 3: return "wp"; break;
+			case 4: return "server"; break;
 		}
 	}
 	function genServer(){

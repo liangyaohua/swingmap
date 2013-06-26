@@ -80,8 +80,36 @@ function colorMarker(device) {
 		return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';  
 	} else if(device == "android") {
 		return 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
-	} else {
+	} else if(device == "wp") {
 		return 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+	} else {
+		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24)); 
+	}
+}
+
+// png icon
+function iconMarker(device) {
+	if (device == "ios") {
+		return 'http://localhost/swingmap/view/images/ios.png';  
+	} else if(device == "android") {
+		return 'http://localhost/swingmap/view/images/android.png';
+	} else if(device == "wp") {
+		return 'http://localhost/swingmap/view/images/windows.png';
+	} else {
+		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24)); 
+	}
+}
+
+// svg icon
+function svgMarker(device) {
+	if (device == "ios") {
+		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg',null, null, null, new google.maps.Size(500*0.05,550*0.05));  
+	} else if(device == "android") {
+		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/f/f1/Android_sample.svg',null, null, null, new google.maps.Size(262*0.1,372*0.1));  
+	} else if(device == "wp^") {
+		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/6/6c/Windows_Phone_7.5_logo.svg',null, null, null, new google.maps.Size(44*0.5,44*0.5));  
+	} else {
+		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24)); 
 	}
 }
 
@@ -92,6 +120,8 @@ function getCircle(volume,device) {
 		_color = 'red';  
 	} else if(device == "android") {
 		_color = 'green';
+	} else if(device == "wp") {
+		_color = 'blue';
 	} else {
 		_color = 'orange';
 	}
