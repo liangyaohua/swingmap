@@ -55,7 +55,7 @@ function addMarker(User) {
 	var marker = new google.maps.Marker({
 		position: latLng,
 		map: map,
-		icon: getCircle(volume, device)
+		icon: colorMarker(device)	// option: circle size depends on volume getCircle(volume,device)
 	});
 	// Content of infoWindow
 	var contentString = '<p>cordinates: [' + lat + ', ' + lng + ']</p><p>time: ' + time + '</p><p>ip: ' + ip + '</p><p>device: ' + device + '</p><p>idClient: ' + idClient + '</p><p>idServer: ' + idServer + '</p><p>volume: ' + volume + '</p>';
@@ -72,6 +72,17 @@ function bindInfoWindow(marker, map, infoWindow, contentString) {
 	google.maps.event.addListener(marker, 'mouseout', function() {
 		infoWindow.close();
 	});
+}
+
+// Select Marker's color
+function colorMarker(device) {
+	if (device == "ios") {
+		return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';  
+	} else if(device == "android") {
+		return 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+	} else {
+		return 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+	}
 }
 
 // Marker's circle style
