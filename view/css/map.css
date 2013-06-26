@@ -1,2 +1,7 @@
 html, body, #map_canvas { margin: 0; padding: 0; height: 100%; }
-p {font-size: 10px; line-height: 50%}
+
+#infoWindow {
+	width: 138px;
+	font-size: 10px; 
+	line-height: 50%
+}

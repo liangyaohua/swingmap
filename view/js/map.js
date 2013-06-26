@@ -3,7 +3,7 @@ var map_id; // "map_canvas"
 var map_zoom; // 6
 var map_center_lat; // 48.583 Strasbourg
 var map_center_lng; // 7.750
-var geojson; // "http://hostname/swingmap/model/genjson.php?device=&server="
+var geojson; // "http://hostname/swingmap/controller/geojson.php?device=&server="
 var infoWindow = new google.maps.InfoWindow;
 var styles;
 
@@ -58,7 +58,7 @@ function addMarker(User) {
 		icon: colorMarker(device)	// option: circle size depends on volume getCircle(volume,device)
 	});
 	// Content of infoWindow
-	var contentString = '<p>cordinates: [' + lat + ', ' + lng + ']</p><p>time: ' + time + '</p><p>ip: ' + ip + '</p><p>device: ' + device + '</p><p>idClient: ' + idClient + '</p><p>idServer: ' + idServer + '</p><p>volume: ' + volume + '</p>';
+	var contentString = '<div id="infoWindow"><p>coords: [' + lat + ', ' + lng + ']</p><p>time: ' + time + '</p><p>ip: ' + ip + '</p><p>device: ' + device + '</p><p>idClient: ' + idClient + '</p><p>idServer: ' + idServer + '</p><p>volume: ' + volume + '</p></div>';
 	
 	bindInfoWindow(marker, map, infoWindow,contentString);	
 }
@@ -69,9 +69,9 @@ function bindInfoWindow(marker, map, infoWindow, contentString) {
 		infoWindow.setContent(contentString);
 		infoWindow.open(map, marker);
 	});
-	google.maps.event.addListener(marker, 'mouseout', function() {
+	/*google.maps.event.addListener(marker, 'mouseout', function() {
 		infoWindow.close();
-	});
+	});*/
 }
 
 // Select Marker's color
