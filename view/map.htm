@@ -14,7 +14,7 @@
 		<script type="text/javascript" src="<?php echo HOST;?>/view/js/map.js"></script>
 		<script type="text/javascript">
 			google.maps.visualRefresh = true;
-
+			var map;
 			var map_id = "map_canvas";
 			var map_zoom = 6;
 			var map_center_lat = 48.583;
@@ -53,7 +53,10 @@
 			}
 			];
 			var geojson;
+			var markersArray = [];
 			var markerStyleOption;
+			var infoWindow = new google.maps.InfoWindow;
+			
 			$(document).ready(function(){
 				initialize();
 				// ajax refresh markers
@@ -80,7 +83,15 @@
 							clearOverlays();
 							geojson = $.parseJSON(xmlhttp.responseText);
 							setMarkers(geojson);
+							// random show infoWindow
+							if(geojson.features.length > 0) {
+								infoWindow.open(map, markersArray[Math.floor((Math.random()*geojson.features.length))]);
+							}
 							document.getElementById("total").innerHTML = "Total users: " + geojson.features.length;
+							/*if(geojson.features.length > 0) {
+								map_zoom = Math.floor((Math.random()*5)+3);
+								map.setZoom(map_zoom);
+							}*/ // auto zoom
 						}
 					}
 					xmlhttp.open("GET","<?php echo HOST;?>/controller/geojson.php?device=" + _device + "&server=" + _server + "&interval=" + _interval,true);

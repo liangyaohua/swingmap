@@ -4,9 +4,10 @@ var map_zoom; // 6
 var map_center_lat; // 48.583 Strasbourg
 var map_center_lng; // 7.750
 var styles;
-var markersArray = [];
+
 var geojson; // geojson objet from http://hostname/swingmap/controller/geojson.php?device=&server=
 var infoWindow = new google.maps.InfoWindow;
+var markersArray = [];
 var markerStyleOption; // color, icon, svg, circle
 
 // Google Map initialization 
@@ -48,9 +49,6 @@ function setMarkers(geojson){
 		// User's informations
 		addMarker(User);
     }
-	if(geojson.features.length > 0) {
-		infoWindow.open(map, markersArray[Math.floor((Math.random()*i))]);
-	}
 	if(markersArray) {
 		for(i in markersArray) {
 			markersArray[i].setMap(map);
