@@ -48,6 +48,9 @@ function setMarkers(geojson){
 		// User's informations
 		addMarker(User);
     }
+	if(geojson.features.length > 0) {
+		infoWindow.open(map, markersArray[Math.floor((Math.random()*i))]);
+	}
 	if(markersArray) {
 		for(i in markersArray) {
 			markersArray[i].setMap(map);
