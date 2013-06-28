@@ -3,9 +3,11 @@ var map_id; // "map_canvas"
 var map_zoom; // 6
 var map_center_lat; // 48.583 Strasbourg
 var map_center_lng; // 7.750
-var geojson; // "http://hostname/swingmap/controller/geojson.php?device=&server="
-var infoWindow = new google.maps.InfoWindow;
 var styles;
+var markersArray = [];
+var geojson; // geojson objet from http://hostname/swingmap/controller/geojson.php?device=&server=
+var infoWindow = new google.maps.InfoWindow;
+var markerStyleOption; // color, icon, svg, circle
 
 // Google Map initialization 
 function initialize() {
@@ -21,23 +23,36 @@ function initialize() {
 		}
 
     });
-	
+	/* old method to get the markers
     // Create a <script> tag and set the USGS URL as the source.
     var script = document.createElement('script');
     script.src = geojson;
     document.getElementsByTagName('head')[0].appendChild(script);
+	*/
+}
+
+// clear markers
+function clearOverlays() {
+	for (var i = 0; i < markersArray.length; i++ ) {
+		markersArray[i].setMap(null);
+	}
+	markersArray = [];
 }
 
 // Loop through the results array and place a marker for each
 // set of coordinates.
-function setMarkers(results){
-    for (var i = 0; i < results.features.length; i++) {
+function setMarkers(geojson){
+    for (var i = 0; i < geojson.features.length; i++) {
 		// Get user
-		var User = results.features[i];
+		var User = geojson.features[i];
 		// User's informations
 		addMarker(User);
     }
-	alert("Total users: " + results.features.length);
+	if(markersArray) {
+		for(i in markersArray) {
+			markersArray[i].setMap(map);
+		}
+	}
 }
 
 // function for adding a marker
@@ -55,8 +70,10 @@ function addMarker(User) {
 	var marker = new google.maps.Marker({
 		position: latLng,
 		map: map,
-		icon: colorMarker(device)	// option: circle size depends on volume getCircle(volume,device)
+		icon: markerStyle(markerStyleOption, device)	// option: circle size depends on volume getCircle(volume,device)
 	});
+	// push marker to the markersArray
+	markersArray.push(marker);
 	// Content of infoWindow
 	var contentString = '<div id="infoWindow"><p>coords: [' + lat + ', ' + lng + ']</p><p>time: ' + time + '</p><p>ip: ' + ip + '</p><p>device: ' + device + '</p><p>idClient: ' + idClient + '</p><p>idServer: ' + idServer + '</p><p>volume: ' + volume + '</p></div>';
 	
@@ -74,56 +91,90 @@ function bindInfoWindow(marker, map, infoWindow, contentString) {
 	});*/
 }
 
+function markerStyle(markerStyleOption, device) {
+	switch(markerStyleOption) {
+		case "color":
+			return colorMarker(device);
+			break;
+		case "icon":
+			return iconMarker(device);
+			break;
+		case "svg":
+			return svgMarker(device,map_zoom);
+			break;
+	}
+}
+
 // Select Marker's color
 function colorMarker(device) {
-	if (device == "ios") {
-		return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';  
-	} else if(device == "android") {
-		return 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
-	} else if(device == "wp") {
-		return 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
-	} else {
-		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24)); 
+	switch(device) {
+		case "ios":
+			return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+			break;
+		case "android":
+			return 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+			break;
+		case "wp":
+			return 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+			break;
+		case "server":
+			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24));
+			break;
 	}
 }
 
 // png icon
 function iconMarker(device) {
-	if (device == "ios") {
-		return 'http://localhost/swingmap/view/images/ios.png';  
-	} else if(device == "android") {
-		return 'http://localhost/swingmap/view/images/android.png';
-	} else if(device == "wp") {
-		return 'http://localhost/swingmap/view/images/windows.png';
-	} else {
-		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24)); 
+	switch(device) {
+		case "ios":
+			return 'http://localhost/swingmap/view/images/ios.png';
+			break;
+		case "android":
+			return 'http://localhost/swingmap/view/images/android.png';
+			break;
+		case "wp":
+			return 'http://localhost/swingmap/view/images/windows.png';
+			break;
+		case "server":
+			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24));
+			break;
 	}
 }
 
 // svg icon
-function svgMarker(device) {
-	if (device == "ios") {
-		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg',null, null, null, new google.maps.Size(500*0.05,550*0.05));  
-	} else if(device == "android") {
-		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/f/f1/Android_sample.svg',null, null, null, new google.maps.Size(262*0.1,372*0.1));  
-	} else if(device == "wp^") {
-		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/6/6c/Windows_Phone_7.5_logo.svg',null, null, null, new google.maps.Size(44*0.5,44*0.5));  
-	} else {
-		return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24)); 
+function svgMarker(device,map_zoom) {
+	switch(device) {
+		case "ios":
+			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg',null, null, null, new google.maps.Size(500*0.05*map_zoom/6,550*0.05*map_zoom/6));
+			break;
+		case "android":
+			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/f/f1/Android_sample.svg',null, null, null, new google.maps.Size(262*0.1*map_zoom/6,372*0.1*map_zoom/6));
+			break;	
+		case "wp":
+			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/6/6c/Windows_Phone_7.5_logo.svg',null, null, null, new google.maps.Size(44*0.5*map_zoom/6,44*0.5*map_zoom/6));
+			break;
+		case "server":
+			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24*map_zoom/6,24*map_zoom/6));
+			break;
 	}
 }
 
 // Marker's circle style
 function getCircle(volume,device) {
 	var _color;
-	if (device == "ios") {
-		_color = 'red';  
-	} else if(device == "android") {
-		_color = 'green';
-	} else if(device == "wp") {
-		_color = 'blue';
-	} else {
-		_color = 'orange';
+	switch(device) {
+		case "ios":
+			_color = 'red';
+			break;
+		case "android":
+			_color = 'green';
+			break;
+		case "wp":
+			_color = 'blue';
+			break;
+		case "server":
+			_color = 'orange';
+			break;
 	}
 	return {
 		path: google.maps.SymbolPath.CIRCLE,

@@ -52,43 +52,80 @@
 				] 
 			}
 			];
-			
-			var geojson = "<?php echo HOST;?>/controller/geojson.php?device=<?php echo $_device;?>&server=<?php echo $_server;?>&interval=<?php echo $_interval;?>";
+			var geojson;
+			var markerStyleOption;
 			$(document).ready(function(){
 				initialize();
-			});
-			//google.maps.event.addDomListener(window, 'load', initialize);
-
-			/*function loadXMLDoc()
-			{
-				var xmlhttp;
-				if (window.XMLHttpRequest)
-				{// code for IE7+, Firefox, Chrome, Opera, Safari
-					xmlhttp=new XMLHttpRequest();
-				}
-				else
-				{// code for IE6, IE5
-					xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-				}
-				xmlhttp.onreadystatechange=function()
-				{
-					if (xmlhttp.readyState==4 && xmlhttp.status==200)
-					{
-						document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-						//geojson="<?php echo HOST;?>/controller/geojson.php?device=<?php echo $_device;?>&server=<?php echo $_server;?>&interval=<?php echo $_interval;?>";
-						//alert(geojson);
-						//initialize();
-						map.setMap();
+				// ajax refresh markers
+				$("#setMarkers").click(function(){
+					var _device = $("#device").val();
+					var _server = $("#server").val();
+					var _interval = $("#interval").val();
+					markerStyleOption = $("#markerStyleOption").val();
+					map_zoom = map.getZoom();
+					//alert(markerStyleOption);
+					var xmlhttp;
+					if (window.XMLHttpRequest)
+					{// code for IE7+, Firefox, Chrome, Opera, Safari
+						xmlhttp=new XMLHttpRequest();
 					}
-				}
-				xmlhttp.open("GET","<?php echo HOST;?>/controller/geojson.php?device=<?php echo $_device;?>&server=<?php echo $_server;?>&interval=<?php echo $_interval;?>",true);
-				xmlhttp.send();
-			}*/
+					else
+					{// code for IE6, IE5
+						xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					xmlhttp.onreadystatechange=function()
+					{
+						if (xmlhttp.readyState==4 && xmlhttp.status==200)
+						{	
+							clearOverlays();
+							geojson = $.parseJSON(xmlhttp.responseText);
+							setMarkers(geojson);
+							document.getElementById("total").innerHTML = "Total users: " + geojson.features.length;
+						}
+					}
+					xmlhttp.open("GET","<?php echo HOST;?>/controller/geojson.php?device=" + _device + "&server=" + _server + "&interval=" + _interval,true);
+					xmlhttp.send();
+				});
+				// auto refresh
+				setInterval(function(){$("#setMarkers").click()},1000);
+			});
 		</script>
 	</head>
 	<body>
 		<div id="map_canvas"></div>
-		<!--div id="myDiv"><h2>Let AJAX change this text</h2></div>
-		<button type="button" onclick="loadXMLDoc()">Change Content</button-->
+		<div id="total"><h2></h2></div>
+		<div>
+			Device: 
+			<select id="device">
+				<option value="">all</option>
+				<option value="ios">ios</option>
+				<option value="android">android</option>
+				<option value="wp">wp</option>
+				<option value="server">server</option>
+			</select>
+		</div>
+		<div>
+			Server:
+			<select id="server">
+				<option value="">all</option>
+				<option value="A">A</option>
+				<option value="B">B</option>
+				<option value="C">C</option>
+				<option value="D">D</option>
+			</select>
+		</div>
+		<div>
+			Marker Style:
+			<select id="markerStyleOption">
+				<option value="color">color pin</option>
+				<option value="icon">png icon</option>
+				<option value="svg">svg icon</option>
+			</select>
+		</div>
+		<div>
+			Interval: 
+			<input type="text" id="interval" value="60">
+		</div>
+		<button id="setMarkers" type="button">Set Markers</button>
 	</body>
 </html>

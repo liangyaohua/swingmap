@@ -45,8 +45,7 @@ function get_geojson($_device, $_server, $_interval){
 		array_push($features, $feature);
 	}
 	$Markers = array("type" => "FeatureCollection", "features" => $features);
-	$function_name = "setMarkers";
-	$geojson =  $function_name."(".json_encode($Markers).")";
+	$geojson = json_encode($Markers);
 	return $geojson;
 }
 ?>
