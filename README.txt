@@ -2,7 +2,7 @@ SwingMap V1.0
 -------------
 swingmap
 	- index.php			
-	- config.php
+	- config.php	// map configuration, parameters
 	- model
 		- db_connection.php	// database connection info
 		- get_geojson.php	// function of generating the geojson object
@@ -14,11 +14,11 @@ swingmap
 		- css
 			- map.css
 		- images
-			- favicon.png
 	- controller
 		- geojson.php	// get the requested geojson
 	- simulator
-		- index.php		
+		- index.php
+		- simu.bat		// simulator script file for windows 
 		- data
 			- geojson_example.json
 			- swingmap_sql_dump.sql
@@ -28,11 +28,11 @@ Installation:
 2.	import the database with swingmap_sql_dump.sql
 
 Test:
-1.	Insert datas with swingmap/simulator/index.php
+1.	Insert datas with swingmap/simulator/index.php or simu.bat(executable file)
 	ex: swingmap/simulator/index.php?max= a number	Default: max=100
 2	Show map swingmap/index.php
 	ex: swingmap/index.php?device=ios&server=A&interval=100	Default: interval=60 seconds
 
 DEMO: http://www.liangyaohua.com/swingmap
 	
-Any questions, please email to yliang@swingmobility.com
+Any questions, please email to yliang@swingmobility.com or alex19891013@gmail.com
