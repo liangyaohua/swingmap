@@ -1,8 +1,8 @@
 SwingMap V1.0
 -------------
 swingmap
-	- index.php			
-	- config.php	// map configuration, parameters
+	- index.php		// parameters	
+	- config.php	// map configuration
 	- model
 		- db_connection.php	// database connection info
 		- get_geojson.php	// function of generating the geojson object
@@ -10,7 +10,7 @@ swingmap
 		- map.htm		// interface, set the parameters for the map functions	
 		- js
 			- map.js	// map functions 
-			- jquery.js	// for the future use	
+			- jquery.js
 		- css
 			- map.css
 		- images
@@ -31,7 +31,7 @@ Test:
 1.	Insert datas with swingmap/simulator/index.php or simu.bat(executable file)
 	ex: swingmap/simulator/index.php?max= a number	Default: max=100
 2	Show map swingmap/index.php
-	ex: swingmap/index.php?device=ios&server=A&interval=100	Default: interval=60 seconds
+	ex: swingmap/index.php
 
 DEMO: http://www.liangyaohua.com/swingmap
 	
