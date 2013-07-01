@@ -98,8 +98,14 @@
 					xmlhttp.send();
 				});
 				// auto refresh
-				setInterval(function(){$("#setMarkers").click()},1000);
+				var intID;
+				$("#play").click(function(){intID = play()});
+				$("#pause").click(function(){clearInterval(intID)});
 			});
+			function play() {
+				intID = setInterval(function(){$("#setMarkers").click()},2000);
+				return intID;
+				}
 		</script>
 	</head>
 	<body>
@@ -138,5 +144,7 @@
 			<input type="text" id="interval" value="60">
 		</div>
 		<button id="setMarkers" type="button">Set Markers</button>
+		<button id="play" type="button">play</button>
+		<button id="pause" type="button">pause</button>
 	</body>
 </html>

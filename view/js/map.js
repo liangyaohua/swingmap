@@ -14,15 +14,13 @@ var markerStyleOption; // color, icon, svg, circle
 function initialize() {
     map = new google.maps.Map(document.getElementById(map_id), {
 		zoom: map_zoom,
+		maxZoom: 9,
+		minZoom: 3,
 		center: new google.maps.LatLng(map_center_lat, map_center_lng),
 		styles: styles,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
-		mapTypeControl: true,
-		mapTypeControlOptions: {	
-			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-			position: google.maps.ControlPosition.TOP_RIGHT
-		}
-
+		mapTypeControl: false,
+		streetViewControl: false
     });
 	/* old method to get the markers
     // Create a <script> tag and set the USGS URL as the source.

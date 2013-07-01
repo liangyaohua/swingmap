@@ -15,6 +15,14 @@
 	if(!in_array($_server, $server_array) && $_server != ""){
 		die("Server not exist: ".$_server);
 	}
+	/*
+	$_year = 
+	$_month = 
+	$_day =
+	$_hour =
+	$_minute = 
+	$_seconde =
+	*/
 	$geojson = get_geojson($_device, $_server, $_interval);
 	echo $geojson;
 ?>
