@@ -5,12 +5,14 @@
 		<meta charset="UTF-8"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<link rel="icon" type="image/png" href="<?php echo HOST;?>/view/img/favicon.png"/>
 		<link rel="stylesheet" type="text/css" href="<?php echo HOST;?>/view/css/map.css"/>
-		<link rel="icon" type="image/png" href="<?php echo HOST;?>/view/images/favicon.png"/>
+		<link rel="stylesheet" media="screen" href="<?php echo HOST;?>/view/css/bootstrap.min.css">
 		<script
 			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEDxb7J_vARiE7CH8NAih35FXpPipQ0bA&sensor=false&libraries=visualization">
 		</script>
-		<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery.js"></script>
+		<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery-1.10.1.min.js"></script>
+		<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="<?php echo HOST;?>/view/js/map.js"></script>
 		<script type="text/javascript">
 			google.maps.visualRefresh = true;
@@ -87,7 +89,7 @@
 							if(geojson.features.length > 0) {
 								infoWindow.open(map, markersArray[Math.floor((Math.random()*geojson.features.length))]);
 							}
-							document.getElementById("total").innerHTML = "Total users: " + geojson.features.length;
+							document.getElementById("info").innerHTML = "Total users: " + geojson.features.length;
 							/*if(geojson.features.length > 0) {
 								map_zoom = Math.floor((Math.random()*5)+3);
 								map.setZoom(map_zoom);
@@ -101,6 +103,10 @@
 				var intID;
 				$("#play").click(function(){intID = play()});
 				$("#pause").click(function(){clearInterval(intID)});
+				$("#map_control").hide();
+				$("#show_control").click(function(){
+					$("#map_control").toggle("Blind");
+				});
 			});
 			function play() {
 				intID = setInterval(function(){$("#setMarkers").click()},2000);
@@ -109,42 +115,41 @@
 		</script>
 	</head>
 	<body>
+		<div id="show_control"><i class="icon-chevron-down"></i></div>
+		<div id="map_control">
+			<div id="info" class="alert alert-info">To see the result, set the interval a big number or execute /swingmap/simulator, then click <i class="icon-map-marker"></i> or <i class="icon-play"></i></div>
+			<div id="options">
+				Device: 
+				<select id="device">
+					<option value="">all</option>
+					<option value="ios">ios</option>
+					<option value="android">android</option>
+					<option value="wp">wp</option>
+					<option value="server">server</option>
+				</select>
+				Server:
+				<select id="server">
+					<option value="">all</option>
+					<option value="A">A</option>
+					<option value="B">B</option>
+					<option value="C">C</option>
+					<option value="D">D</option>
+				</select>
+				Marker Style:
+				<select id="markerStyleOption">
+					<option value="color">color pin</option>
+					<option value="icon">png icon</option>
+					<option value="svg">svg icon</option>
+				</select>
+				Interval: 
+				<input class="input-mini" type="text" id="interval" value="60"><span class="help-inline">second</span>
+			</div>
+			<div class="btn-group">
+				<button class="btn" id="setMarkers" type="button"><i class="icon-map-marker"></i></button>
+				<button class="btn btn-success" id="play" type="button"><i class="icon-play"></i></button>
+				<button class="btn btn-warning" id="pause" type="button"><i class="icon-pause"></i></button>
+			</div>
+		</div>
 		<div id="map_canvas"></div>
-		<div id="total"><h3>To see the result, set the interval a big number or execute /swingmap/simulator, then click play</h3></div>
-		<div>
-			Device: 
-			<select id="device">
-				<option value="">all</option>
-				<option value="ios">ios</option>
-				<option value="android">android</option>
-				<option value="wp">wp</option>
-				<option value="server">server</option>
-			</select>
-		</div>
-		<div>
-			Server:
-			<select id="server">
-				<option value="">all</option>
-				<option value="A">A</option>
-				<option value="B">B</option>
-				<option value="C">C</option>
-				<option value="D">D</option>
-			</select>
-		</div>
-		<div>
-			Marker Style:
-			<select id="markerStyleOption">
-				<option value="color">color pin</option>
-				<option value="icon">png icon</option>
-				<option value="svg">svg icon</option>
-			</select>
-		</div>
-		<div>
-			Interval: 
-			<input type="text" id="interval" value="60">
-		</div>
-		<button id="setMarkers" type="button">Set Markers</button>
-		<button id="play" type="button">play</button>
-		<button id="pause" type="button">pause</button>
 	</body>
 </html>

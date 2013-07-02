@@ -126,13 +126,13 @@ function colorMarker(device) {
 function iconMarker(device) {
 	switch(device) {
 		case "ios":
-			return 'http://localhost/swingmap/view/images/ios.png';
+			return 'http://localhost/swingmap/view/img/ios.png';
 			break;
 		case "android":
-			return 'http://localhost/swingmap/view/images/android.png';
+			return 'http://localhost/swingmap/view/img/android.png';
 			break;
 		case "wp":
-			return 'http://localhost/swingmap/view/images/windows.png';
+			return 'http://localhost/swingmap/view/img/windows.png';
 			break;
 		case "server":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24));
