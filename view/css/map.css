@@ -19,3 +19,9 @@ html, body, #map_canvas {
 	font-size: 10px; 
 	line-height: 50%
 }
+#datetimepicker {
+	margin: 0 0 0 10px
+}
+#setMarkers {
+	margin-right: 10px
+}
