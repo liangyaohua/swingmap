@@ -1,19 +1,21 @@
 SwingMap V1.0
 -------------
 swingmap
-	- index.php		// parameters	
-	- config.php	// map configuration
+	- index.php		// set parameters	
+	- config.php	// configuration
 	- model
-		- db_connection.php	// database connection info
+		- db_connection.php	// database connection
 		- get_geojson.php	// function of generating the geojson object
 	- view
-		- map.htm		// interface, set the parameters for the map functions	
+		- map.htm		// interface	
 		- js
 			- map.js	// map functions 
-			- jquery.js
+			- jquery-1.10.1.min.js
+			- bootstrap.min.js
 		- css
 			- map.css
-		- images
+			- bootstrap.min.css
+		- img
 	- controller
 		- geojson.php	// get the requested geojson
 	- simulator
@@ -22,13 +24,13 @@ swingmap
 		- data
 			- geojson_example.json
 			- swingmap_sql_dump.sql
-			
+
 Installation:
 1.	copy the swingmap folder into www directory
 2.	import the database with swingmap_sql_dump.sql
 
 Test:
-1.	Insert datas with swingmap/simulator/index.php or simu.bat(executable file)
+1.	Insert datas with swingmap/simulator/index.php or simu.bat(for windows)
 	ex: swingmap/simulator/index.php?max= a number	Default: max=100
 2	Show map swingmap/index.php
 	ex: swingmap/index.php
