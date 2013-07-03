@@ -60,7 +60,7 @@
 			var markersArray = [];
 			var markerStyleOption;
 			var infoWindow = new google.maps.InfoWindow;
-			
+		
 			$(document).ready(function(){
 				initialize();
 				// ajax refresh markers
@@ -96,6 +96,8 @@
 								map_zoom = Math.floor((Math.random()*5)+3);
 								map.setZoom(map_zoom);
 							}*/ // auto zoom
+						} else {
+							$("#info").html("loading...");
 						}
 					}
 					xmlhttp.open("GET","<?php echo HOST;?>/controller/geojson.php?device=" + _device + "&server=" + _server + "&interval=" + _interval,true);
@@ -103,7 +105,7 @@
 				});
 				// auto refresh
 				var intID;
-				$("#play").click(function(){intID = play()});
+				$("#play").click(function(){clearInterval(intID);intID = play()});
 				$("#pause").click(function(){clearInterval(intID)});
 				$("#map_control").hide();
 				$("#show_control").click(function(){
