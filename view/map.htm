@@ -60,6 +60,8 @@
 			var markersArray = [];
 			var markerStyleOption;
 			var infoWindow = new google.maps.InfoWindow;
+			var autoRefreshFreq = 30000;
+			var showInfoWindowFreq = 2000;
 		
 			$(document).ready(function(){
 				initialize();
@@ -87,10 +89,6 @@
 							clearOverlays();
 							geojson = $.parseJSON(xmlhttp.responseText);
 							setMarkers(geojson);
-							// random show infoWindow
-							if(geojson.features.length > 0) {
-								infoWindow.open(map, markersArray[Math.floor((Math.random()*geojson.features.length))]);
-							}
 							$("#info").html("Total users: " + geojson.features.length);
 							/*if(geojson.features.length > 0) {
 								map_zoom = Math.floor((Math.random()*5)+3);
@@ -104,9 +102,26 @@
 					xmlhttp.send();
 				});
 				// auto refresh
-				var intID;
-				$("#play").click(function(){clearInterval(intID);intID = play()});
-				$("#pause").click(function(){clearInterval(intID)});
+				var AR;
+				var IW;
+				$("#play").click(function(){
+					$("#setMarkers").click();
+					$("#datetimepicker").fadeOut();
+					clearInterval(AR);
+					clearInterval(IW);
+					AR = autoRefresh();
+					IW = showInfoWindow();
+					// option change trigger
+					$("#device,#server,#markerStyleOption,#interval").change(function(){$("#setMarkers").click()});
+				});
+				$("#pause").click(function(){
+					clearInterval(AR)
+					clearInterval(IW);
+				});
+				$("#backward").click(function(){
+					$("#datetimepicker").fadeIn();
+				});
+				// map control bar
 				$("#map_control").hide();
 				$("#show_control").click(function(){
 					if($("#arrow").attr("class") == "icon-chevron-down") {
@@ -117,17 +132,24 @@
 						$("#arrow").removeClass("icon-chevron-up").addClass("icon-chevron-down");
 					}
 				});
+				// date time picker 
 				$('#datetimepicker').datetimepicker({
 					language: 'en'
 				});
 				$("#datetimepicker").hide();
-				$("#backward").click(function(){
-					$("#datetimepicker").toggle("Drop");
-				});
 			});
-			function play() {
-				intID = setInterval(function(){$("#setMarkers").click()},2000);
-				return intID;
+			// auto refresh function
+			function autoRefresh() {
+				AR = setInterval(function(){$("#setMarkers").click()},autoRefreshFreq);
+				return AR;
+			}
+			function showInfoWindow() {
+				IW = setInterval(function(){
+					if(geojson.features.length > 0) {
+						infoWindow.open(map, markersArray[Math.floor((Math.random()*geojson.features.length))]);
+					}
+				},showInfoWindowFreq);
+				return IW;
 			}
 		</script>
 	</head>
@@ -162,7 +184,7 @@
 				<input class="input-mini" type="text" id="interval" value="60"><span class="help-inline">second</span>
 			</div>
 			<button class="btn" id="setMarkers" type="button"><i class="icon-map-marker"></i></button>
-			<div class="btn-group">
+			<div class="btn-group" data-toggle="buttons-radio">
 				<button class="btn btn-info" id="backward" type="button"><i class="icon-backward"></i></button>
 				<button class="btn btn-success" id="play" type="button"><i class="icon-play"></i></button>
 				<button class="btn btn-warning" id="pause" type="button"><i class="icon-pause"></i></button>
