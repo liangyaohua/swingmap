@@ -81,8 +81,8 @@ function addMarker(User) {
 
 // Bind the infoWindows to the markers
 function bindInfoWindow(marker, map, infoWindow, contentString) {
-	google.maps.event.addListener(marker, 'mouseover', function() {
-		infoWindow.setContent(contentString);
+	infoWindow.setContent(contentString);
+	google.maps.event.addListener(marker, 'click', function() {
 		infoWindow.open(map, marker);
 	});
 	/*google.maps.event.addListener(marker, 'mouseout', function() {
