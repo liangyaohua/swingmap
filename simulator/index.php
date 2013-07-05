@@ -26,7 +26,7 @@
 	}catch (PDOException $e) {
 		die('Insertion failed: '.$e->getMessage()."\n");
 	}
-	echo "<script language='Javascript'> alert('Insertion success: ".$result." messages'); </script>";
+	echo "Insertion success: ".$result." messages";
 
 	function genDevice(){
 		$num = rand(1,4);
