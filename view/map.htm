@@ -60,9 +60,9 @@
 			var markersArray = [];
 			var markerStyleOption;
 			var infoWindow = new google.maps.InfoWindow;
-			var autoRefreshFreq = 30000;
 			var showInfoWindowFreq = 2000;
-		
+			var autoRefreshFreq = 30000;
+			
 			$(document).ready(function(){
 				initialize();
 				// ajax refresh markers
@@ -71,8 +71,9 @@
 					var _server = $("#server").val();
 					var _interval = $("#interval").val();
 					markerStyleOption = $("#markerStyleOption").val();
+					autoRefreshFreq = $("#frequency").val();
 					map_zoom = map.getZoom();
-					//alert(markerStyleOption);
+					
 					var xmlhttp;
 					if (window.XMLHttpRequest)
 					{// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -90,10 +91,6 @@
 							geojson = $.parseJSON(xmlhttp.responseText);
 							setMarkers(geojson);
 							$("#result").html("<br>Total users: " + geojson.features.length);
-							/*if(geojson.features.length > 0) {
-								map_zoom = Math.floor((Math.random()*5)+3);
-								map.setZoom(map_zoom);
-							}*/ // auto zoom
 						} else if(xmlhttp.status==404) {
 							$("#result").html("<br>404: Data loading failed");
 						} else {
@@ -115,6 +112,11 @@
 					IW = showInfoWindow();
 					// option change trigger
 					$("#device,#server,#markerStyleOption,#interval").change(function(){$("#setMarkers").click()});
+					$("#frequency").change(function(){
+						clearInterval(AR);
+						$("#setMarkers").click();
+						AR = autoRefresh();
+					});
 				});
 				$("#pause").click(function(){
 					clearInterval(AR);
@@ -197,6 +199,13 @@
 					<option value="900">15 min</option>
 					<option value="1800">30 min</option>
 					<option value="3600">1 h</option>
+					<option value="86400">1 day</option>
+				</select>
+				Refresh Frequency:
+				<select id="frequency" class="input-small">
+					<option value="10000">1/10s</option>
+					<option value="30000" selected>1/30s</option>
+					<option value="60000">1/1min</option>
 				</select>
 			</div>
 			<button class="btn" id="setMarkers" type="button"><i class="icon-map-marker"></i></button>

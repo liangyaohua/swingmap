@@ -11,7 +11,7 @@ html, body, #map_canvas {
 	position: relative;
 	text-align: center
 }
-#device, #server, #markerStyleOption {
+#device, #server, #markerStyleOption, #interval, #frequency {
 	margin-right: 5px
 }
 #infoWindow {
