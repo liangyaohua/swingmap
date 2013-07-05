@@ -89,15 +89,15 @@
 							clearOverlays();
 							geojson = $.parseJSON(xmlhttp.responseText);
 							setMarkers(geojson);
-							$("#result").html("Total users: " + geojson.features.length);
+							$("#result").html("<br>Total users: " + geojson.features.length);
 							/*if(geojson.features.length > 0) {
 								map_zoom = Math.floor((Math.random()*5)+3);
 								map.setZoom(map_zoom);
 							}*/ // auto zoom
 						} else if(xmlhttp.status==404) {
-							$("#result").html("404: Data loading failed");
+							$("#result").html("<br>404: Data loading failed");
 						} else {
-							$("#result").html("loading...");
+							$("#result").html("<br>loading...");
 						}
 					}
 					xmlhttp.open("GET","<?php echo HOST;?>/controller/geojson.php?device=" + _device + "&server=" + _server + "&interval=" + _interval,true);
@@ -159,10 +159,14 @@
 	<body>
 		<div id="show_control"><i id="arrow" class="icon-chevron-down"></i></div>
 		<div id="map_control">
-			<div id="info" class="alert alert-info">To see the result, set interval a big number or click <a href="<?php echo HOST;?>/simulator" target="_blank">here</a> to simulate datas, then click <i class="icon-map-marker"></i> or <i class="icon-play"></i><div id="result"></div></div>
+			<div id="info" class="alert alert-info">
+				Chose a interval to see the active users in this period [now-interval,now].
+				<div>You can also click <a href="<?php echo HOST;?>/simulator" target="_blank">here</a> to simulate new datas.</div>
+				<div><i class="icon-map-marker"></i> setMarkers/refresh <i class="icon-play"></i> start live mode <i class="icon-pause"></i> stop live mode <i class="icon-backward"></i> playback</div>
+				<div id="result"></div></div>
 			<div id="options">
 				Device: 
-				<select id="device">
+				<select id="device" class="input-small">
 					<option value="">all</option>
 					<option value="ios">ios</option>
 					<option value="android">android</option>
@@ -170,7 +174,7 @@
 					<option value="server">server</option>
 				</select>
 				Server:
-				<select id="server">
+				<select id="server" class="input-small">
 					<option value="">all</option>
 					<option value="A">A</option>
 					<option value="B">B</option>
@@ -178,13 +182,22 @@
 					<option value="D">D</option>
 				</select>
 				Marker Style:
-				<select id="markerStyleOption">
+				<select id="markerStyleOption" class="input-small">
 					<option value="color">color pin</option>
 					<option value="icon">png icon</option>
 					<option value="svg">svg icon</option>
 				</select>
-				Interval: 
-				<input class="input-mini" type="text" id="interval" value="60"><span class="help-inline">second</span>
+				Interval:
+				<select id="interval" class="input-small">
+					<option value="10">10 s</option>
+					<option value="30">30 s</option>
+					<option value="60" selected>1 min</option>
+					<option value="300">5 min</option>
+					<option value="600">10 min</option>
+					<option value="900">15 min</option>
+					<option value="1800">30 min</option>
+					<option value="3600">1 h</option>
+				</select>
 			</div>
 			<button class="btn" id="setMarkers" type="button"><i class="icon-map-marker"></i></button>
 			<div class="btn-group" data-toggle="buttons-radio">
