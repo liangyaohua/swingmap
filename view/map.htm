@@ -84,7 +84,7 @@
 					}
 					xmlhttp.onreadystatechange=function()
 					{
-						if (xmlhttp.readyState==4 && xmlhttp.status==200)
+						if(xmlhttp.readyState==4 && xmlhttp.status==200)
 						{	
 							clearOverlays();
 							geojson = $.parseJSON(xmlhttp.responseText);
@@ -94,6 +94,8 @@
 								map_zoom = Math.floor((Math.random()*5)+3);
 								map.setZoom(map_zoom);
 							}*/ // auto zoom
+						} else if(xmlhttp.status==404) {
+							$("#info").html("404: Data loading failed");
 						} else {
 							$("#info").html("loading...");
 						}
@@ -146,7 +148,7 @@
 			function showInfoWindow() {
 				IW = setInterval(function(){
 					if(geojson.features.length > 0) {
-						infoWindow.open(map, markersArray[Math.floor((Math.random()*geojson.features.length))]);
+						google.maps.event.trigger(markersArray[Math.floor((Math.random()*geojson.features.length))], 'click');
 					}
 				},showInfoWindowFreq);
 				return IW;
