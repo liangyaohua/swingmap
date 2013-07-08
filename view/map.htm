@@ -6,7 +6,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 		<link rel="icon" type="image/png" href="<?php echo HOST;?>/view/img/favicon.png"/>
-		<link rel="stylesheet" type="text/css" href="<?php echo HOST;?>/view/css/map.css"/>
+		<link rel="stylesheet" type="text/css" href="<?php echo HOST;?>/view/css/swingmap.css"/>
 		<link rel="stylesheet" media="screen" href="<?php echo HOST;?>/view/css/bootstrap.min.css">
 		<link rel="stylesheet" media="screen" href="<?php echo HOST;?>/view/css/bootstrap-datetimepicker.min.css">
 		<script
@@ -15,7 +15,7 @@
 		<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery-1.10.1.min.js"></script>
 		<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap-datetimepicker.min.js"></script>
-		<script type="text/javascript" src="<?php echo HOST;?>/view/js/map.js"></script>
+		<script type="text/javascript" src="<?php echo HOST;?>/view/js/swingmap.js"></script>
 		<script type="text/javascript">
 			google.maps.visualRefresh = true;
 			var map;
@@ -191,6 +191,7 @@
 					<option value="color">color pin</option>
 					<option value="icon">png icon</option>
 					<option value="svg">svg icon</option>
+					<option value="circle">circle</option>
 				</select>
 				Interval:
 				<select id="interval" class="input-small">

@@ -69,7 +69,7 @@ function addMarker(User) {
 	var marker = new google.maps.Marker({
 		position: latLng,
 		map: map,
-		icon: markerStyle(markerStyleOption, device)	// option: circle size depends on volume getCircle(volume,device)
+		icon: markerStyleOption=="circle"?getCircle(device,volume):markerStyle(markerStyleOption, device)	// option: circle size depends on volume getCircle(volume,device)
 	});
 	// push marker to the markersArray
 	markersArray.push(marker);
@@ -156,7 +156,7 @@ function svgMarker(device,map_zoom) {
 }
 
 // Marker's circle style
-function getCircle(volume,device) {
+function getCircle(device,volume) {
 	var _color;
 	switch(device) {
 		case "ios":
