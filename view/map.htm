@@ -129,11 +129,14 @@
 				$("#map_control").hide();
 				$("#show_control").click(function(){
 					if($("#arrow").attr("class") == "icon-chevron-down") {
-						$("#map_control").slideDown("Blind");
+						$("#map_control").slideDown();
 						$("#arrow").removeClass("icon-chevron-down").addClass("icon-chevron-up");
+						// show the scrollbar
+						$("html,body,#map_canvas").css("overflow","auto");
 					}else {
-						$("#map_control").slideUp("Blind");
+						$("#map_control").slideUp();
 						$("#arrow").removeClass("icon-chevron-up").addClass("icon-chevron-down");
+						$("html,body,#map_canvas").css("overflow","hidden");
 					}
 				});
 				// date time picker 

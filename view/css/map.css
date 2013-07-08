@@ -2,7 +2,8 @@ html, body, #map_canvas {
 	margin: 0;
 	padding: 0; 
 	height: 100%; 
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2)
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	overflow: hidden
 }
 #map_control {
 	margin: 0 20px 10px 20px
