@@ -176,7 +176,7 @@ function getCircle(device,volume) {
 		path: google.maps.SymbolPath.CIRCLE,
 		fillColor: _color,
 		fillOpacity: .8,
-		scale: Math.sqrt(volume/Math.PI)/50,
+		scale: Math.sqrt(volume/Math.PI)/40,
 		strokeColor: 'white',
 		strokeWeight: 0.1
 	};
