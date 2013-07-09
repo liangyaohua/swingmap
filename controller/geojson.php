@@ -1,10 +1,12 @@
 <?php
 	include_once('../model/db_connection.php');
 	include_once('../model/get_geojson.php');
+	date_default_timezone_set('Europe/Paris');
 	
 	$_device = isset($_GET['device'])?$_GET['device']:"";
 	$_server = isset($_GET['server'])?$_GET['server']:"";
 	$_interval = isset($_GET['interval'])?$_GET['interval']:"60";
+	$_datetime = (isset($_GET['datetime'])&&$_GET['datetime']!="")?$_GET['datetime']:date("Y-m-d H:i:s");
 	
 	$device_array = array("ios", "android", "wp", "server");
 	$server_array = array("A", "B", "C", "D");
@@ -15,14 +17,7 @@
 	if(!in_array($_server, $server_array) && $_server != ""){
 		die("Server not exist: ".$_server);
 	}
-	/*
-	$_year = 
-	$_month = 
-	$_day =
-	$_hour =
-	$_minute = 
-	$_seconde =
-	*/
-	$geojson = get_geojson($_device, $_server, $_interval);
+	
+	$geojson = get_geojson($_device, $_server, $_interval, $_datetime);
 	echo $geojson;
 ?>

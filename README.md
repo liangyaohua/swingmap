@@ -7,14 +7,16 @@ swingmap
 		- db_connection.php	// database connection
 		- get_geojson.php	// function of generating the geojson object
 	- view
-		- map.htm		// interface	
+		- swingmap.htm		// interface	
 		- js
-			- map.js	// map functions 
+			- swingmap.js	// map functions 
 			- jquery-1.10.1.min.js
 			- bootstrap.min.js
+			- bootstrap-datetimepicker.min.js
 		- css
-			- map.css
+			- swingmap.css
 			- bootstrap.min.css
+			- bootstrap-datetimepicker.min.css
 		- img
 	- controller
 		- geojson.php	// get the requested geojson
@@ -26,7 +28,7 @@ swingmap
 			- swingmap_sql_dump.sql
 
 Installation:
-1.	copy the swingmap folder into www directory
+1.	copy the swingmap folder into your www directory
 2.	import the database with swingmap_sql_dump.sql
 
 Test:

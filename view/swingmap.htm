@@ -70,9 +70,12 @@
 					var _device = $("#device").val();
 					var _server = $("#server").val();
 					var _interval = $("#interval").val();
+					var _datetime = $("#datetime").val();
 					markerStyleOption = $("#markerStyleOption").val();
 					autoRefreshFreq = $("#frequency").val();
 					map_zoom = map.getZoom();
+					
+					var geojsonUrl = "<?php echo HOST;?>/controller/geojson.php?device=" + _device + "&server=" + _server + "&interval=" + _interval + "&datetime=" + _datetime;
 					
 					var xmlhttp;
 					if (window.XMLHttpRequest)
@@ -97,15 +100,16 @@
 							$("#result").html("<br>loading...");
 						}
 					}
-					xmlhttp.open("GET","<?php echo HOST;?>/controller/geojson.php?device=" + _device + "&server=" + _server + "&interval=" + _interval,true);
+					xmlhttp.open("GET", geojsonUrl, true);
 					xmlhttp.send();
 				});
 				// auto refresh
 				var AR;
 				var IW;
 				$("#play").click(function(){
-					$("#setMarkers").click();
+					$("#datetime").val("");
 					$("#datetimepicker").fadeOut();
+					$("#setMarkers").click();
 					clearInterval(AR);
 					clearInterval(IW);
 					AR = autoRefresh();
@@ -121,8 +125,13 @@
 				$("#pause").click(function(){
 					clearInterval(AR);
 					clearInterval(IW);
+					$("#datetimepicker").fadeOut();
 				});
+				var current_time;
 				$("#backward").click(function(){
+					$("#pause").click();
+					current_time = new Date();
+					current_time.toString('yyyy-MM-dd'); 
 					$("#datetimepicker").fadeIn();
 				});
 				// map control bar
@@ -144,7 +153,6 @@
 					language: 'en'
 				});
 				$("#datetimepicker").hide();
-				//$("#result").hide();
 			});
 			// auto refresh function
 			function autoRefresh() {
@@ -219,7 +227,7 @@
 				<button class="btn btn-warning" id="pause" type="button"><i class="icon-pause"></i></button>
 			</div>
 			<div id="datetimepicker" class="input-append">
-				<input data-format="yyyy-MM-dd hh:mm:ss" type="text"></input>
+				<input id="datetime" data-format="yyyy-MM-dd hh:mm:ss" type="text"></input>
 				<span class="add-on">
 					<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 				</span>
