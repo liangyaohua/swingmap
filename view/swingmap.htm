@@ -9,165 +9,6 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo HOST;?>/view/css/swingmap.css"/>
 		<link rel="stylesheet" media="screen" href="<?php echo HOST;?>/view/css/bootstrap.min.css">
 		<link rel="stylesheet" media="screen" href="<?php echo HOST;?>/view/css/bootstrap-datetimepicker.min.css">
-		<script
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEDxb7J_vARiE7CH8NAih35FXpPipQ0bA&sensor=false&libraries=visualization">
-		</script>
-		<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery-1.10.1.min.js"></script>
-		<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap-datetimepicker.min.js"></script>
-		<script type="text/javascript" src="<?php echo HOST;?>/view/js/swingmap.js"></script>
-		<script type="text/javascript">
-			google.maps.visualRefresh = true;
-			var map;
-			var map_id = "map_canvas";
-			var map_zoom = 6;
-			var map_center_lat = 48.583;
-			var map_center_lng = 7.750;
-			var styles = [
-			{
-				stylers: [
-					{ hue: "#D9EDF7" },
-					{ saturation: -20 }
-				]
-			},{ 
-				"featureType": "road", 
-				"stylers": [ 
-					{ "visibility": "off" } 
-				] 
-			},{ 
-				"featureType": "landscape.man_made", 
-				"stylers": [ 
-					{ "visibility": "off" } 
-				] 
-			},{ 
-				"featureType": "landscape.natural.terrain", 
-				"stylers": [ 
-					{ "visibility": "off" }
-				] 
-			},{ 
-				"featureType": "poi", 
-				"stylers": [ 
-					{ "visibility": "off" } 
-				] 
-			},{ 
-				"featureType": "transit", 
-				"stylers": [ 
-					{ "visibility": "off" } 
-				] 
-			}
-			];
-			var geojson;
-			var markersArray = [];
-			var markerStyleOption;
-			var infoWindow = new google.maps.InfoWindow;
-			var showInfoWindowFreq = 2000;
-			var autoRefreshFreq = 30000;
-			
-			$(document).ready(function(){
-				initialize();
-				// ajax refresh markers
-				$("#setMarkers").click(function(){
-					var _device = $("#device").val();
-					var _server = $("#server").val();
-					var _interval = $("#interval").val();
-					var _datetime = $("#datetime").val();
-					markerStyleOption = $("#markerStyleOption").val();
-					autoRefreshFreq = $("#frequency").val();
-					map_zoom = map.getZoom();
-					
-					var geojsonUrl = "<?php echo HOST;?>/controller/geojson.php?device=" + _device + "&server=" + _server + "&interval=" + _interval + "&datetime=" + _datetime;
-					
-					var xmlhttp;
-					if (window.XMLHttpRequest)
-					{// code for IE7+, Firefox, Chrome, Opera, Safari
-						xmlhttp=new XMLHttpRequest();
-					}
-					else
-					{// code for IE6, IE5
-						xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-					}
-					xmlhttp.onreadystatechange=function()
-					{
-						if(xmlhttp.readyState==4 && xmlhttp.status==200)
-						{	
-							clearOverlays();
-							geojson = $.parseJSON(xmlhttp.responseText);
-							setMarkers(geojson);
-							$("#result").html("<br>Total users: " + geojson.features.length);
-						} else if(xmlhttp.status==404) {
-							$("#result").html("<br>404: Data loading failed");
-						} else {
-							$("#result").html("<br>loading...");
-						}
-					}
-					xmlhttp.open("GET", geojsonUrl, true);
-					xmlhttp.send();
-				});
-				// auto refresh
-				var AR;
-				var IW;
-				$("#play").click(function(){
-					$("#datetime").val("");
-					$("#datetimepicker").fadeOut();
-					$("#setMarkers").click();
-					clearInterval(AR);
-					clearInterval(IW);
-					AR = autoRefresh();
-					IW = showInfoWindow();
-					// option change trigger
-					$("#device,#server,#markerStyleOption,#interval").change(function(){$("#setMarkers").click()});
-					$("#frequency").change(function(){
-						clearInterval(AR);
-						$("#setMarkers").click();
-						AR = autoRefresh();
-					});
-				});
-				$("#pause").click(function(){
-					clearInterval(AR);
-					clearInterval(IW);
-					$("#datetimepicker").fadeOut();
-				});
-				var current_time;
-				$("#backward").click(function(){
-					$("#pause").click();
-					current_time = new Date();
-					current_time.toString('yyyy-MM-dd'); 
-					$("#datetimepicker").fadeIn();
-				});
-				// map control bar
-				$("#map_control").hide();
-				$("#show_control").click(function(){
-					if($("#arrow").attr("class") == "icon-chevron-down") {
-						$("#map_control").slideDown();
-						$("#arrow").removeClass("icon-chevron-down").addClass("icon-chevron-up");
-						// show the scrollbar
-						$("html,body,#map_canvas").css("overflow","auto");
-					}else {
-						$("#map_control").slideUp();
-						$("#arrow").removeClass("icon-chevron-up").addClass("icon-chevron-down");
-						$("html,body,#map_canvas").css("overflow","hidden");
-					}
-				});
-				// date time picker 
-				$('#datetimepicker').datetimepicker({
-					language: 'en'
-				});
-				$("#datetimepicker").hide();
-			});
-			// auto refresh function
-			function autoRefresh() {
-				AR = setInterval(function(){$("#setMarkers").click()},autoRefreshFreq);
-				return AR;
-			}
-			function showInfoWindow() {
-				IW = setInterval(function(){
-					if(geojson.features.length > 0) {
-						google.maps.event.trigger(markersArray[Math.floor((Math.random()*geojson.features.length))], 'click');
-					}
-				},showInfoWindowFreq);
-				return IW;
-			}
-		</script>
 	</head>
 	<body>
 		<div id="show_control"><i id="arrow" class="icon-chevron-down"></i></div>
@@ -175,24 +16,25 @@
 			<div id="info" class="alert alert-info">
 				Chose a interval to see the active users in this period [now-interval,now].
 				<div>You can also click <a href="<?php echo HOST;?>/simulator" target="_blank">here</a> to simulate new datas.</div>
-				<div><i class="icon-map-marker"></i> setMarkers/refresh <i class="icon-play"></i> start live mode <i class="icon-pause"></i> stop live mode <i class="icon-backward"></i> playback</div>
-				<div id="result"></div></div>
+				<div><i class="icon-map-marker"></i> setMarkers/refresh <i class="icon-play"></i> start live mode <i class="icon-pause"></i> stop live mode <i class="icon-backward"></i> look back</div>
+				<div id="result"></div>
+			</div>
 			<div id="options">
 				Device: 
 				<select id="device" class="input-small">
 					<option value="">all</option>
-					<option value="ios">ios</option>
-					<option value="android">android</option>
-					<option value="wp">wp</option>
-					<option value="server">server</option>
+					<?php
+						foreach($device_array as $value)
+							echo "<option value='".$value."'>".$value."</option>";
+					?>
 				</select>
 				Server:
 				<select id="server" class="input-small">
 					<option value="">all</option>
-					<option value="A">A</option>
-					<option value="B">B</option>
-					<option value="C">C</option>
-					<option value="D">D</option>
+					<?php 
+						foreach($server_array as $value)
+							echo "<option value='".$value."'>".$value."</option>";
+					?>
 				</select>
 				Marker Style:
 				<select id="markerStyleOption" class="input-small">
@@ -235,4 +77,60 @@
 		</div>
 		<div id="map_canvas"></div>
 	</body>
+	<script
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEDxb7J_vARiE7CH8NAih35FXpPipQ0bA&sensor=false&libraries=visualization">
+	</script>
+	<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript" src="<?php echo HOST;?>/view/js/swingmap.js"></script>
+	<script type="text/javascript">
+		google.maps.visualRefresh = true;
+		// parameters initialization 
+		var map;
+		var map_id = "map_canvas";
+		var map_zoom = 6;
+		var map_center_lat = 48.583;
+		var map_center_lng = 7.750;
+		var styles = [
+		{
+			stylers: [
+				{ hue: "#D9EDF7" },
+				{ saturation: -20 }
+			]
+		},{ 
+			"featureType": "road", 
+			"stylers": [ 
+				{ "visibility": "off" } 
+			] 
+		},{ 
+			"featureType": "landscape.man_made", 
+			"stylers": [ 
+				{ "visibility": "off" } 
+			] 
+		},{ 
+			"featureType": "landscape.natural.terrain", 
+			"stylers": [ 
+				{ "visibility": "off" }
+			] 
+		},{ 
+			"featureType": "poi", 
+			"stylers": [ 
+				{ "visibility": "off" } 
+			] 
+		},{ 
+			"featureType": "transit", 
+			"stylers": [ 
+				{ "visibility": "off" } 
+			] 
+		}
+		];
+		var infoWindow = new google.maps.InfoWindow;
+		
+		var geojson;
+		var markersArray = [];
+		var markerStyleOption;
+		var autoRefreshFreq = 30000;
+		var geojsonUrl = "<?php echo HOST;?>/controller/geojson.php";
+	</script>
 </html>

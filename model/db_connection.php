@@ -1,9 +1,10 @@
 <?php
-  $host = "localhost";
+	// database info
+	$host = "localhost";
 	$port = 3306;
-	$username = "";
-	$password = "";
-	$database = "";
+	$username = "yliang";
+	$password = "112358";
+	$database = "swingmap";
 	
 	// Opens a connection to a MySQL server
 	try {

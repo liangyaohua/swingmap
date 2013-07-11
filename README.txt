@@ -1,8 +1,8 @@
 SwingMap V1.0
 -------------
 swingmap
-	- index.php		// set parameters	
-	- config.php	// configuration
+	- index.php			
+	- config.php	// parameters configuration
 	- model
 		- db_connection.php	// database connection
 		- get_geojson.php	// function of generating the geojson object

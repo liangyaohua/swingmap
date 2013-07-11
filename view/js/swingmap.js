@@ -3,16 +3,20 @@ var map_id; // "map_canvas"
 var map_zoom; // 6
 var map_center_lat; // 48.583 Strasbourg
 var map_center_lng; // 7.750
-var styles;
-
-var geojson; // geojson objet from http://hostname/swingmap/controller/geojson.php?device=&server=
+var styles; // map styles
 var infoWindow = new google.maps.InfoWindow;
+
+var geojson; // geojson objet
 var markersArray = [];
 var markerStyleOption; // color, icon, svg, circle
+var autoRefreshFreq; // 30000
+var geojsonUrl; // http://hostname/controller/geojson.php
 
-// Google Map initialization 
+var showInfoWindowFreq = 2000;
+
+// Google Map initialization
 function initialize() {
-    map = new google.maps.Map(document.getElementById(map_id), {
+	map = new google.maps.Map(document.getElementById(map_id), {
 		zoom: map_zoom,
 		maxZoom: 9,
 		minZoom: 3,
@@ -21,16 +25,10 @@ function initialize() {
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 		mapTypeControl: false,
 		streetViewControl: false
-    });
-	/* old method to get the markers
-    // Create a <script> tag and set the USGS URL as the source.
-    var script = document.createElement('script');
-    script.src = geojson;
-    document.getElementsByTagName('head')[0].appendChild(script);
-	*/
+	});
 }
 
-// clear markers
+// Clear markers
 function clearOverlays() {
 	for (var i = 0; i < markersArray.length; i++ ) {
 		markersArray[i].setMap(null);
@@ -41,12 +39,10 @@ function clearOverlays() {
 // Loop through the results array and place a marker for each
 // set of coordinates.
 function setMarkers(geojson){
-    for (var i = 0; i < geojson.features.length; i++) {
-		// Get user
+	for (var i = 0; i < geojson.features.length; i++) {
 		var User = geojson.features[i];
-		// User's informations
 		addMarker(User);
-    }
+	}
 	if(markersArray) {
 		for(i in markersArray) {
 			markersArray[i].setMap(map);
@@ -54,7 +50,7 @@ function setMarkers(geojson){
 	}
 }
 
-// function for adding a marker
+// Create and add marker
 function addMarker(User) {
 	var lat = User.geometry.coordinates[1];
 	var lng = User.geometry.coordinates[0];
@@ -64,22 +60,25 @@ function addMarker(User) {
 	var idClient = User.properties.idClient;
 	var idServer = User.properties.idServer;
 	var volume = User.properties.volume;
+	
 	// Create marker
 	var latLng = new google.maps.LatLng(lat,lng);
 	var marker = new google.maps.Marker({
 		position: latLng,
 		map: map,
-		icon: markerStyleOption=="circle"?getCircle(device,volume):markerStyle(markerStyleOption, device)	// option: circle size depends on volume getCircle(volume,device)
+		icon: markerStyleOption=="circle"?getCircle(device,volume):markerStyle(markerStyleOption, device)
 	});
+	
 	// push marker to the markersArray
 	markersArray.push(marker);
+	
 	// Content of infoWindow
 	var contentString = '<div id="infoWindow"><p>coords: [' + lat + ', ' + lng + ']</p><p>time: ' + time + '</p><p>ip: ' + ip + '</p><p>device: ' + device + '</p><p>idClient: ' + idClient + '</p><p>idServer: ' + idServer + '</p><p>volume: ' + volume + '</p></div>';
 	
-	bindInfoWindow(marker, map, infoWindow,contentString);	
+	bindInfoWindow(marker, map, infoWindow,contentString);
 }
-
-// Bind the infoWindows to the markers
+	
+// Bind infoWindows to markers
 function bindInfoWindow(marker, map, infoWindow, contentString) {
 	google.maps.event.addListener(marker, 'click', function() {
 		infoWindow.setContent(contentString);
@@ -87,6 +86,16 @@ function bindInfoWindow(marker, map, infoWindow, contentString) {
 	});
 }
 
+// Random show infoWindow
+function showInfoWindow() {
+	return setInterval(function() {
+		if(geojson.features.length > 0) {
+			google.maps.event.trigger(markersArray[Math.floor((Math.random()*geojson.features.length))], 'click');
+		}
+	},showInfoWindowFreq);
+}
+
+// Markers style option
 function markerStyle(markerStyleOption, device) {
 	switch(markerStyleOption) {
 		case "color":
@@ -101,7 +110,7 @@ function markerStyle(markerStyleOption, device) {
 	}
 }
 
-// Select Marker's color
+// color pin style
 function colorMarker(device) {
 	switch(device) {
 		case "ios":
@@ -145,7 +154,7 @@ function svgMarker(device,map_zoom) {
 			break;
 		case "android":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/f/f1/Android_sample.svg',null, null, null, new google.maps.Size(262*0.1*map_zoom/6,372*0.1*map_zoom/6));
-			break;	
+			break;
 		case "wp":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/6/6c/Windows_Phone_7.5_logo.svg',null, null, null, new google.maps.Size(44*0.5*map_zoom/6,44*0.5*map_zoom/6));
 			break;
@@ -155,7 +164,7 @@ function svgMarker(device,map_zoom) {
 	}
 }
 
-// Marker's circle style
+// circle style
 function getCircle(device,volume) {
 	var _color;
 	switch(device) {
@@ -180,4 +189,100 @@ function getCircle(device,volume) {
 		strokeColor: 'white',
 		strokeWeight: 0.1
 	};
+}
+
+// jQuery code for map control
+$(function(){
+	initialize();
+	// ajax refresh markers
+	$("#setMarkers").click(function(){
+		var _device = $("#device").val();
+		var _server = $("#server").val();
+		var _interval = $("#interval").val();
+		var _datetime = $("#datetime").val();
+		markerStyleOption = $("#markerStyleOption").val();
+		autoRefreshFreq = $("#frequency").val();
+		map_zoom = map.getZoom();
+		
+		var downloadUrl = geojsonUrl + "?device=" + _device + "&server=" + _server + "&interval=" + _interval + "&datetime=" + _datetime;
+		
+		// ajax
+		var xmlhttp;
+		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		} else {// code for IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function() {
+			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				clearOverlays();
+				geojson = $.parseJSON(xmlhttp.responseText);
+				setMarkers(geojson);
+				$("#result").html("<br>Total users: " + geojson.features.length);
+			} else if(xmlhttp.status == 404) {
+				$("#result").html("<br>404: Data loading failed");
+			} else {
+				$("#result").html("<br>loading...");
+			}
+		}
+		xmlhttp.open("GET", downloadUrl, true);
+		xmlhttp.send();
+	});
+	// auto refresh
+	var AR;
+	var IW;
+	var current_time;
+	// play button start live mode
+	$("#play").click(function(){
+		$("#datetime").val("");
+		$("#datetimepicker").fadeOut();
+		$("#setMarkers").click();
+		clearInterval(AR);
+		clearInterval(IW);
+		AR = autoRefresh();
+		IW = showInfoWindow();
+		// option change trigger
+		$("#device,#server,#markerStyleOption,#interval").change(function(){$("#setMarkers").click()});
+		$("#frequency").change(function(){
+			clearInterval(AR);
+			$("#setMarkers").click();
+			AR = autoRefresh();
+		});
+	});
+	// pause button stop live mode
+	$("#pause").click(function(){
+		clearInterval(AR);
+		clearInterval(IW);
+		$("#datetimepicker").fadeOut();
+	});
+	// playback button see the history recode
+	$("#backward").click(function(){
+		$("#pause").click();
+		current_time = new Date();
+		current_time.toString('yyyy-MM-dd');
+		$("#datetimepicker").fadeIn();
+	});
+	// map control bar
+	$("#map_control").hide();
+	$("#show_control").click(function(){
+		if($("#arrow").attr("class") == "icon-chevron-down") {
+			$("#map_control").slideDown();
+			$("#arrow").removeClass("icon-chevron-down").addClass("icon-chevron-up");
+			// show the scrollbar
+			$("html,body,#map_canvas").css("overflow","auto");
+		} else {
+			$("#map_control").slideUp();
+			$("#arrow").removeClass("icon-chevron-up").addClass("icon-chevron-down");
+			$("html,body,#map_canvas").css("overflow","hidden");
+		}
+	});
+	// date time picker
+	$('#datetimepicker').datetimepicker({
+		language: 'en'
+	});
+	$("#datetimepicker").hide();
+});
+// auto refresh function
+function autoRefresh() {
+	return setInterval(function(){$("#setMarkers").click()},autoRefreshFreq);
 }
