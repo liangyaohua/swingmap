@@ -231,7 +231,6 @@ $(function(){
 	// auto refresh
 	var AR;
 	var IW;
-	var current_time;
 	// play button start live mode
 	$("#play").click(function(){
 		$("#datetime").val("");
@@ -258,8 +257,6 @@ $(function(){
 	// playback button see the history recode
 	$("#backward").click(function(){
 		$("#pause").click();
-		current_time = new Date();
-		current_time.toString('yyyy-MM-dd');
 		$("#datetimepicker").fadeIn();
 	});
 	// map control bar
