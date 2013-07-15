@@ -11,6 +11,7 @@ var markersArray = [];
 var markerStyleOption; // color, icon, svg, circle
 var autoRefreshFreq; // 30000
 var geojsonUrl; // http://hostname/controller/geojson.php
+var imgUrl;	// http://hostname/view/img/
 
 var showInfoWindowFreq = 2000;
 
@@ -65,7 +66,7 @@ function addMarker(User) {
 	var latLng = new google.maps.LatLng(lat,lng);
 	var marker = new google.maps.Marker({
 		position: latLng,
-		map: map,
+		//optimized: false,
 		icon: markerStyleOption=="circle"?getCircle(device,volume):markerStyle(markerStyleOption, device)
 	});
 	
@@ -114,13 +115,13 @@ function markerStyle(markerStyleOption, device) {
 function colorMarker(device) {
 	switch(device) {
 		case "ios":
-			return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+			return imgUrl + 'red-dot.png';
 			break;
 		case "android":
-			return 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+			return imgUrl + 'green-dot.png';
 			break;
 		case "wp":
-			return 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+			return imgUrl + 'blue-dot.png';
 			break;
 		case "server":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24));
@@ -132,13 +133,13 @@ function colorMarker(device) {
 function iconMarker(device) {
 	switch(device) {
 		case "ios":
-			return 'http://localhost/swingmap/view/img/ios.png';
+			return imgUrl + 'ios.png';
 			break;
 		case "android":
-			return 'http://localhost/swingmap/view/img/android.png';
+			return imgUrl + 'android.png';
 			break;
 		case "wp":
-			return 'http://localhost/swingmap/view/img/windows.png';
+			return imgUrl + 'windows.png';
 			break;
 		case "server":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24));
@@ -219,8 +220,6 @@ $(function(){
 				geojson = $.parseJSON(xmlhttp.responseText);
 				setMarkers(geojson);
 				$("#result").html("<br>Total users: " + geojson.features.length);
-			} else if(xmlhttp.status == 404) {
-				$("#result").html("<br>404: Data loading failed");
 			} else {
 				$("#result").html("<br>loading...");
 			}
