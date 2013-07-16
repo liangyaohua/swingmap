@@ -4,15 +4,15 @@ var map_zoom; // 6
 var map_center_lat; // 48.583 Strasbourg
 var map_center_lng; // 7.750
 var styles; // map styles
-var infoWindow = new google.maps.InfoWindow;
 
-var geojson; // geojson objet
-var markersArray = [];
-var markerStyleOption; // color, icon, svg, circle
 var autoRefreshFreq; // 30000
 var geojsonUrl; // http://hostname/controller/geojson.php
 var imgUrl;	// http://hostname/view/img/
 
+var geojson; // geojson obje
+var markersArray = [];
+var markerStyleOption; // color, icon, svg, circle
+var infoWindow = new google.maps.InfoWindow;
 var showInfoWindowFreq = 2000;
 
 // Google Map initialization
@@ -238,8 +238,7 @@ $(function(){
 		xmlhttp.send();
 	});
 	// auto refresh
-	var AR;
-	var IW;
+	var AR, IW;
 	// play button start live mode
 	$("#play").click(function(){
 		$("#datetime").val("");
