@@ -198,6 +198,7 @@ $(function(){
 	initialize();
 	// ajax refresh markers
 	$("#setMarkers").click(function(){
+		$("#showtime").hide();
 		var _device = $("#device").val();
 		var _server = $("#server").val();
 		var _interval = $("#interval").val();
@@ -229,7 +230,8 @@ $(function(){
 				clearOverlays();
 				geojson = $.parseJSON(xmlhttp.responseText);
 				setMarkers(geojson);
-				$("#result").html("<br>Total users: " + geojson.features.length + "<span style='float:right'>" +endtime + "</span>");
+				$("#result").html("<br>Total users: " + geojson.features.length);
+				$("#showtime").html(endtime).fadeIn().fadeOut().fadeIn();
 			} else {
 				$("#result").html("<br>loading...");
 			}
@@ -238,7 +240,8 @@ $(function(){
 		xmlhttp.send();
 	});
 	// auto refresh
-	var AR, IW;
+	var AR;
+	var IW;
 	// play button start live mode
 	$("#play").click(function(){
 		$("#datetime").val("");

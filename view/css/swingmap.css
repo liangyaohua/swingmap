@@ -30,3 +30,6 @@ html, body, #map_canvas {
 #info {
 	padding: 8px 14px 8px 14px
 }
+#showtime {
+	float: right
+}
