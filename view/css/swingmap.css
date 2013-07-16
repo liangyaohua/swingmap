@@ -18,7 +18,8 @@ html, body, #map_canvas {
 #infoWindow {
 	width: 145px;
 	font-size: 10px; 
-	line-height: 50%
+	line-height: 50%;
+	margin: 3px 0 -6px 3px
 }
 #datetimepicker {
 	margin: 0 0 0 10px

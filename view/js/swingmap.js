@@ -58,6 +58,7 @@ function addMarker(User) {
 	var time = User.properties.time;
 	var ip = User.properties.ip;
 	var device = User.properties.device;
+	var idDevice = User.properties.idDevice;
 	var idClient = User.properties.idClient;
 	var idServer = User.properties.idServer;
 	var volume = User.properties.volume;
@@ -74,7 +75,7 @@ function addMarker(User) {
 	markersArray.push(marker);
 	
 	// Content of infoWindow
-	var contentString = '<div id="infoWindow"><p>coords: [' + lat + ', ' + lng + ']</p><p>time: ' + time + '</p><p>ip: ' + ip + '</p><p>device: ' + device + '</p><p>idClient: ' + idClient + '</p><p>idServer: ' + idServer + '</p><p>volume: ' + volume + '</p></div>';
+	var contentString = '<div id="infoWindow"><p>' + time + '</p><p>ip: ' + ip + '</p><p>device: ' + device + '</p><p>idDevice: ' + idDevice + '</p><p>idClient: ' + idClient + '</p><p>idServer: ' + idServer + '</p><p>volume: ' + volume + '</p></div>';
 	
 	bindInfoWindow(marker, map, infoWindow,contentString);
 }

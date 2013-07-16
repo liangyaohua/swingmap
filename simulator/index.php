@@ -3,7 +3,7 @@
 	include_once('../model/db_connection.php');
 	$max = (isset($_GET['max']) && $_GET['max'] != "")?$_GET['max']:100;
 		
-	$query = "insert into marker (time,lat,lng,ip,device,idClient,idServer,volume,idIP_Coordinate,idClient_Coordinate) values ";
+	$query = "insert into marker (time,lat,lng,ip,device, idDevice,idClient,idServer,volume,idIP_Coordinate,idClient_Coordinate) values ";
 
 	for($i = 0; $i < $max; $i++){
 		$time = date("Y-m-d H:i:s");
@@ -11,13 +11,14 @@
 		$lng = (float)(mt_rand(-5, 23).'.'.mt_rand(0,999999));
 		$ip = mt_rand(0,223).'.'.mt_rand(0,255).'.'.mt_rand(0,255).'.'.mt_rand(0,255);
 		$device = genDevice();
+		$idDevice = $device.mt_rand(1,9999);
 		$idClient = genClient().mt_rand(1,9999).genServer();
 		$idServer = genServer();
 		$volume = mt_rand(1024,102400);
 		$idIP_Coordinate = mt_rand(1,1000);
 		$idClient_Coordinate = mt_rand(1,1000);
 
-		$query .= "('".$time."','".$lat."','".$lng."','".$ip."','".$device."','".$idClient."','".$idServer."','".$volume."','".$idIP_Coordinate."','".$idClient_Coordinate."'), ";
+		$query .= "('".$time."','".$lat."','".$lng."','".$ip."','".$device."','".$idDevice."','".$idClient."','".$idServer."','".$volume."','".$idIP_Coordinate."','".$idClient_Coordinate."'), ";
 	}
 	$query = substr($query,0,-2);
 	//die($query);
