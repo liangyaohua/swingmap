@@ -27,3 +27,6 @@ html, body, #map_canvas {
 #setMarkers {
 	margin-right: 10px
 }
+#info {
+	padding: 8px 14px 8px 14px
+}

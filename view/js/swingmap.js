@@ -206,7 +206,16 @@ $(function(){
 		autoRefreshFreq = $("#frequency").val();
 		map_zoom = map.getZoom();
 		
-		var downloadUrl = geojsonUrl + "?device=" + _device + "&server=" + _server + "&interval=" + _interval + "&datetime=" + _datetime;
+		var date = new Date();
+		var month = date.getMonth()>=9?(date.getMonth()+1):("0"+(date.getMonth()+1));
+		var day = date.getDate()>=10?date.getDate():("0"+date.getDate());
+		var hour = date.getHours()>=10?date.getHours():("0"+date.getHours());
+		var minute = date.getMinutes()>=10?date.getMinutes():("0"+date.getMinutes());
+		var second = date.getSeconds()>=10?date.getSeconds():("0"+date.getSeconds());
+		var curtime = date.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+		var endtime = _datetime==""?curtime:_datetime;
+		
+		var downloadUrl = geojsonUrl + "?device=" + _device + "&server=" + _server + "&interval=" + _interval + "&datetime=" + endtime;
 		
 		// ajax
 		var xmlhttp;
@@ -220,7 +229,7 @@ $(function(){
 				clearOverlays();
 				geojson = $.parseJSON(xmlhttp.responseText);
 				setMarkers(geojson);
-				$("#result").html("<br>Total users: " + geojson.features.length);
+				$("#result").html("<br>Total users: " + geojson.features.length + "<span style='float:right'>" +endtime + "</span>");
 			} else {
 				$("#result").html("<br>loading...");
 			}
@@ -252,6 +261,7 @@ $(function(){
 	$("#pause").click(function(){
 		clearInterval(AR);
 		clearInterval(IW);
+		$("#datetime").val("");
 		$("#datetimepicker").fadeOut();
 	});
 	// playback button see the history recode
