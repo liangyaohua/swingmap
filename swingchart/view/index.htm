@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>SwingChart</title>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<link rel="icon" type="image/png" href="<?php echo HOST;?>/view/favicon.png"/>
+
+		<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery-1.10.1.min.js"></script>
+		<script type="text/javascript">
+		var total = <?php echo $total_device['total']; ?>;
+		
+		$(function () {
+			var colors = [
+						   '#1aadce', 
+						   '#8bbc21',
+						   '#2f7ed8',
+						   '#0d233a', 
+						   '#a6c96a',
+						   '#492970',
+						   '#f28f43', 
+						   '#77a1e5', 
+						   '#910000', 
+						   '#c42525'
+						],
+				categories = [<?php foreach($device_array as $device){echo "'".$device."',";} ?>],
+				name = 'Device type',
+				data = [
+					<?php 
+						foreach($device_array as $key => $device){
+							echo "{
+									y:".$total_device[$device]['total'].",
+									color:colors[".$key."],
+									drilldown:{
+										name: 'Servers',
+										categories:[";
+											foreach($server_array as $server){echo "'".$server."',";}
+										echo "],
+										data:[";
+											foreach($server_array as $server){
+												echo $total_device[$device][$server].",";
+											}
+										echo "],
+										color:colors[".$key."]
+									}
+								},";
+						}
+					?>
+				];
+					
+			function setChart(name, categories, data, color) {
+				chart.xAxis[0].setCategories(categories, false);
+				chart.series[0].remove(false);
+				chart.addSeries({
+					name: name,
+					data: data,
+					color: color || 'black'
+				}, false);
+				chart.redraw();
+			}
+		
+			var chart = $('#container').highcharts({
+				chart: {
+					type: 'column'
+				},
+				title: {
+					text: 'Browser market share, April, 2011'
+				},
+				subtitle: {
+					text: 'Click the columns to view versions. Click again to view brands.'
+				},
+				xAxis: {
+					categories: categories
+				},
+				yAxis: {
+					title: {
+						text: 'Total percent market share'
+					}
+				},
+				plotOptions: {
+					column: {
+						cursor: 'pointer',
+						point: {
+							events: {
+								click: function() {
+									var drilldown = this.drilldown;
+									if (drilldown) { // drill down
+										setChart(drilldown.name, drilldown.categories, drilldown.data, drilldown.color);
+									} else { // restore
+										setChart(name, categories, data);
+									}
+								}
+							}
+						},
+						dataLabels: {
+							enabled: true,
+							color: colors[3],
+							style: {
+								fontWeight: 'normal'
+							},
+							formatter: function() {
+								return this.y;
+							}
+						}
+					}
+				},
+				tooltip: {
+					formatter: function() {
+						var point = this.point,
+						s = this.x +': <b>'+ ((this.y/total)*100).toFixed(2) +'%</b> market share<br/>';
+						if (!point.drilldown) {	
+							s = this.x +': <b>'+ this.y +'%</b> market share<br/>';
+						}
+						return s;
+					}
+				},
+				series: [{
+					name: name,
+					data: data,
+					color: 'black'
+				}],
+				exporting: {
+					enabled: true
+				}
+			})
+			.highcharts(); // return chart
+		});
+    
+
+		</script>
+	</head>
+	<body>
+<script src="<?php echo HOST;?>/view/js/highcharts.js"></script>
+<script src="<?php echo HOST;?>/view/js/exporting.js"></script>
+
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>

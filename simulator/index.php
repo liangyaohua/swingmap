@@ -29,14 +29,15 @@
 	echo "Insertion success: ".$result." messages";
 
 	function genDevice(){
-		$num = rand(1,4);
-		switch($num)
-		{
-			case 1:	return "ios"; break;
-			case 2: return "android"; break;
-			case 3: return "wp"; break;
-			case 4: return "server"; break;
-		}
+		$num = rand(1,100);
+		if($num <=30)
+			return "ios";
+		else if($num > 35 && $num <=78)
+			return "android";
+		else if($num > 78 && $num <=91)
+			return "wp";
+		else
+			return "server";
 	}
 	function genServer(){
 		$num = rand(1,4);

@@ -18,4 +18,5 @@
 	
 	$geojson = get_geojson($_device, $_server, $_interval, $_datetime);
 	echo $geojson;
+	$connection = null;
 ?>

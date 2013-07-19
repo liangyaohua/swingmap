@@ -9,6 +9,7 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo HOST;?>/view/css/swingmap.css"/>
 		<link rel="stylesheet" media="screen" href="<?php echo HOST;?>/view/css/bootstrap.min.css">
 		<link rel="stylesheet" media="screen" href="<?php echo HOST;?>/view/css/bootstrap-datetimepicker.min.css">
+		<link rel="stylesheet" media="screen" href="<?php echo HOST;?>/view/fancybox/jquery.fancybox.css">
 	</head>
 	<body>
 		<div id="show_control"><i id="arrow" class="icon-chevron-down"></i></div>
@@ -74,6 +75,9 @@
 					<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 				</span>
 			</div>
+			<a id="fancybox-button" href="<?php echo HOST; ?>/swingchart">
+                <button class="btn" type="button"><i class="icon-picture"></i></button>
+            </a>
 		</div>
 		<div id="map_canvas"></div>
 	</body>
@@ -83,6 +87,7 @@
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery-1.10.1.min.js"></script>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript" src="<?php echo HOST;?>/view/fancybox/jquery.fancybox.js"></script>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/swingmap.js"></script>
 	<script type="text/javascript">
 		google.maps.visualRefresh = true;
@@ -129,5 +134,17 @@
 		var autoRefreshFreq = 30000;
 		var geojsonUrl = "<?php echo HOST;?>/controller/geojson.php";
 		var imgUrl = "<?php echo HOST;?>/view/img/";
+		$(document).ready(function() {
+			$("#fancybox-button").fancybox({
+					'width'             : 500,
+					'scrolling'         : 'no',
+					'transitionIn'      : 'fade',
+					'transitionOut'     : 'fade',
+					'type'              : 'iframe',
+					'showCloseButton'   : false,
+					'enableEscapeButton': false,
+					'hideOnOverlayClick': false
+				});
+		});
 	</script>
 </html>
