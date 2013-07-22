@@ -2,6 +2,7 @@
 	error_reporting(E_ERROR);
 	define('ROOT_PATH', preg_replace("/\\\/",'/', dirname(__FILE__)).'/');
 	define('HOST','http://'.$_SERVER['HTTP_HOST'].'/swingmap');
+	define('HOST_CHART','http://'.$_SERVER['HTTP_HOST'].'/swingchart');
 	define('DEBUG',true); // set true for test, false for live
 	date_default_timezone_set('Europe/Paris');
 	
