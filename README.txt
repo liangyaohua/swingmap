@@ -3,6 +3,7 @@ SwingMap V1.0
 swingmap
 	- index.php			
 	- config.php	// parameters configuration
+	- addMarkers.php	// add markers api
 	- model
 		- db_connection.php	// database connection
 		- get_geojson.php	// function of generating the geojson object
@@ -18,6 +19,7 @@ swingmap
 			- bootstrap.min.css
 			- bootstrap-datetimepicker.min.css
 		- img
+		- fancybox	//fancybox lib
 	- controller
 		- geojson.php	// get the requested geojson
 	- simulator
