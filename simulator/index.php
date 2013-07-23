@@ -3,7 +3,7 @@
 	include_once('../model/db_connection.php');
 	$max = (isset($_GET['max']) && $_GET['max'] != "")?$_GET['max']:100;
 		
-	$query = "insert into marker (time,lat,lng,ip,device, idDevice,idClient,idServer,volume) values ";
+	$query = "insert into marker (time,lat,lng,ip,device,idDevice,idClient,idServer,volume) values ";
 
 	for($i = 0; $i < $max; $i++){
 		$time = date("Y-m-d H:i:s");

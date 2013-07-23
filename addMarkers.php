@@ -6,7 +6,7 @@
 		$data = $_GET['data'];
 		$markersArray = json_decode($data);
 	} else {
-		die("error");
+		die("error: empty message");
 	}
 	
 	$query = "insert into marker (time,lat,lng,ip,device,idDevice,idClient,idServer,volume) values ";
@@ -32,13 +32,15 @@
 	//die($query);
 	try {
 		$result = $connection->exec($query);
+		echo "Insertion success: ".$result." messages<br>";
+		if(sizeof($fail) > 0) {
+			echo "Failed: ";
+			foreach($fail as $value) {
+				echo "message ".$value.": ".json_encode($markersArray[$value])."<br>";
+			}
+		}
 	}catch (PDOException $e) {
 		die('Insertion failed: '.$e->getMessage()."\n");
-	}
-	echo "Insertion success: ".$result." messages<br>";
-	echo "Insertion failed: ";
-	foreach($fail as $value) {
-		print_r($markersArray[$value]);
 	}
 	
 	function isValidDateTime($dateTime) 

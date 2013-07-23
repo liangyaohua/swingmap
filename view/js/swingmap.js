@@ -42,7 +42,10 @@ function clearOverlays() {
 function setMarkers(geojson){
 	for (var i = 0; i < geojson.features.length; i++) {
 		var User = geojson.features[i];
-		addMarker(User);
+		var lat = User.geometry.coordinates[1];
+		var lng = User.geometry.coordinates[0];
+		if(lat != 0 && lng != 0)
+			addMarker(User);
 	}
 	if(markersArray) {
 		for(i in markersArray) {
