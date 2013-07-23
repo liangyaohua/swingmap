@@ -4,16 +4,21 @@ swingmap
 	- index.php			
 	- config.php	// parameters configuration
 	- addMarkers.php	// add markers api
+	- swingchart.php	// statistics chart
 	- model
 		- db_connection.php	// database connection
 		- get_geojson.php	// function of generating the geojson object
+		- get_total_device.php	// get statistic data
 	- view
-		- swingmap.htm		// interface	
+		- swingmap.htm		// map ui
+		- swingchart.htm	// chart ui
 		- js
 			- swingmap.js	// map functions 
 			- jquery-1.10.1.min.js
 			- bootstrap.min.js
 			- bootstrap-datetimepicker.min.js
+			- exporting.js
+			- highcharts.js
 		- css
 			- swingmap.css
 			- bootstrap.min.css
