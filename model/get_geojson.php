@@ -86,7 +86,7 @@
 			$lng = $ip_coords->lng;
 			return array($lat,$lng);
 		} else {
-			$query = @unserialize(file_get_contents('http://ip-api.com/php/'.$ip));
+			$query = @unserialize(file_get_contents('http://ip-api.com/php/'.$ip.'?fields=lat,lon,status'));
 			if($query && $query['status'] == 'success') {
 				$lat = $query['lat'];
 				$lng = $query['lon'];
