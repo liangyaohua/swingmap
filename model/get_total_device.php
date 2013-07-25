@@ -1,9 +1,9 @@
 <?php
 	function get_total_device($_device){
-		global $connection, $device_array, $server_array;
+		global $connection, $device_array;
 		
 		if(in_array($_device, $device_array)){
-			$sql = "select count(distinct idDevice) as total from marker where device = :device group by idServer";
+			$sql = "select idServer, count(distinct idDevice) as total from marker where device = :device group by idServer";
 			$result = $connection->prepare($sql);
 			$result->bindValue(':device', $_device, PDO::PARAM_STR);
 		}else{
@@ -14,8 +14,8 @@
 		
 		$total_by_device = array();
 		$total_device = 0;
-		for($i = 0; $i < sizeof($server_array) && $row = $result->fetch(); $i++){
-			$total_by_device[$server_array[$i]] = $row->total;
+		while($row = $result->fetch()){
+			$total_by_device[$row->idServer] = $row->total;
 			$total_device += $row->total;
 		}
 		$total_by_device['total'] = $total_device;
