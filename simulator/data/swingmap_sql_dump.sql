@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Ven 19 Juillet 2013 à 14:45
+-- Généré le: Jeu 25 Juillet 2013 à 13:51
 -- Version du serveur: 5.5.24-log
 -- Version de PHP: 5.4.3
 
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `ip_coordinate` (
   `date` date NOT NULL,
   PRIMARY KEY (`idIP_Coordinate`),
   KEY `ip` (`ip`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=369 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1053 ;
 
 -- --------------------------------------------------------
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `marker` (
   `volume` int(11) NOT NULL,
   PRIMARY KEY (`idMarker`),
   KEY `time` (`time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32803 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39503 ;
 
 DELIMITER $$
 --

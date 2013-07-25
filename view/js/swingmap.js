@@ -39,7 +39,7 @@ function clearOverlays() {
 
 // Loop through the results array and place a marker for each
 // set of coordinates.
-function setMarkers(geojson){
+function setMarkers(geojson) {
 	for (var i = 0; i < geojson.features.length; i++) {
 		var User = geojson.features[i];
 		var lat = User.geometry.coordinates[1];

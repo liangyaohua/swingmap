@@ -5,7 +5,7 @@
 		
 	$query = "insert into marker (time,lat,lng,ip,device,idDevice,idClient,idServer,volume) values ";
 
-	for($i = 0; $i < $max; $i++){
+	for($i = 0; $i < $max; $i++) {
 		$time = date("Y-m-d H:i:s");
 		$latlng = genLatlng();
 		$lat = $latlng[0];
@@ -21,6 +21,7 @@
 	}
 	$query = substr($query,0,-2);
 	//die($query);
+	
 	try {
 		$result = $connection->exec($query);
 	}catch (PDOException $e) {
@@ -28,7 +29,7 @@
 	}
 	echo "Insertion success: ".$result." messages";
 
-	function genDevice(){
+	function genDevice() {
 		$num = rand(1,100);
 		if($num <=30)
 			return "ios";
@@ -39,7 +40,7 @@
 		else
 			return "server";
 	}
-	function genServer(){
+	function genServer() {
 		$num = rand(1,4);
 		switch($num)
 		{
@@ -49,7 +50,7 @@
 			case 4: return "D"; break;
 		}
 	}
-	function genClient(){
+	function genClient() {
 		$num = rand(1,4);
 		switch($num)
 		{
@@ -59,11 +60,11 @@
 			case 4: return "SG"; break;
 		}
 	}
-	function genLatlng(){
+	function genLatlng() {
 		$num = rand(1,100);
-		if($num < 10){
+		if($num < 10) {
 			return array(0,0);
-		}else{
+		} else {
 			return array((float)(mt_rand(43, 53).'.'.mt_rand(0,999999)),(float)(mt_rand(-5, 23).'.'.mt_rand(0,999999)));
 		}
 	}

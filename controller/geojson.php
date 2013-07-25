@@ -9,10 +9,10 @@
 	$_interval = isset($_GET['interval'])?$_GET['interval']:"60";
 	$_datetime = (isset($_GET['datetime'])&&$_GET['datetime']!="")?$_GET['datetime']:date("Y-m-d H:i:s");
 	
-	if(!in_array($_device, $device_array) && $_device != ""){
+	if(!in_array($_device, $device_array) && $_device != "") {
 		die("Device not exist: ".$_device);
 	}
-	if(!in_array($_server, $server_array) && $_server != ""){
+	if(!in_array($_server, $server_array) && $_server != "") {
 		die("Server not exist: ".$_server);
 	}
 	

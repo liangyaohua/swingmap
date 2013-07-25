@@ -1,23 +1,23 @@
 <?php
 	include_once('../config.php');
 	
-	function get_geojson($_device, $_server, $_interval, $_datetime){
+	function get_geojson($_device, $_server, $_interval, $_datetime) {
 		global $connection, $device_array, $server_array;
 		
-		if(in_array($_device, $device_array) && in_array($_server, $server_array)){
+		if(in_array($_device, $device_array) && in_array($_server, $server_array)) {
 			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, volume from marker where device = :device and idServer = :idServer and time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime";
 			$result = $connection->prepare($sql);
 			$result->bindValue(':device', $_device, PDO::PARAM_STR);
 			$result->bindValue(':idServer', $_server, PDO::PARAM_STR);
-		}else if(in_array($_device, $device_array) && $_server == ""){
+		} else if(in_array($_device, $device_array) && $_server == "") {
 			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, volume from marker where device = :device and time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime";
 			$result = $connection->prepare($sql);
 			$result->bindValue(':device', $_device, PDO::PARAM_STR);
-		}else if($_device == "" && in_array($_server, $server_array)){
+		} else if($_device == "" && in_array($_server, $server_array)) {
 			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, volume from marker where idServer = :idServer and time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime";
 			$result = $connection->prepare($sql);
 			$result->bindValue(':idServer', $_server, PDO::PARAM_STR);
-		}else{
+		} else {
 			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, volume from marker where time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime";
 			$result = $connection->prepare($sql);
 		}
@@ -31,9 +31,9 @@
 		
 		$features = array();
 		$feature = array();
-		while ($row = $result->fetch()){
+		while ($row = $result->fetch()) {
 			// if gps not exist, idClient to gps, ip to gps
-			if((float)$row->lat == 0 && (float)$row->lng == 0){ 
+			if((float)$row->lat == 0 && (float)$row->lng == 0) { 
 				if(!($latlng = get_client_coords($row->idClient)))
 					$latlng = get_ip_coords($row->ip);
 				$row->lat = $latlng[0];
@@ -57,7 +57,7 @@
 		$geojson = json_encode($Markers);
 		return $geojson;
 	}
-	
+	// get coordinates by idClient
 	function get_client_coords($idClient) {
 		global $connection;
 		$sql = "select lat, lng from client_coordinate where idClient = :idClient";
@@ -73,7 +73,7 @@
 			return false;
 		}
 	}
-	
+	// get coordinates by ip
 	function get_ip_coords($ip) {
 		global $connection;
 		$sql = "select lat, lng from ip_coordinate where ip = :ip";

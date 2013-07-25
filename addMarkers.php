@@ -28,8 +28,9 @@
 			array_push($fail, $i);
 		}
 	}
-	$query = substr($query,0,-2);
+	$query = substr($query,0,-2); // remove the last comma
 	//die($query);
+	
 	try {
 		$result = $connection->exec($query);
 		echo "Insertion success: ".$result." messages<br>";
@@ -39,10 +40,11 @@
 				echo "message ".$value.": ".json_encode($markersArray[$value])."<br>";
 			}
 		}
-	}catch (PDOException $e) {
+	} catch (PDOException $e) {
 		die('Insertion failed: '.$e->getMessage()."\n");
 	}
 	
+	// function of datetime validation
 	function isValidDateTime($dateTime) 
 	{ 
 		if (preg_match("/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/", $dateTime, $matches)) { 

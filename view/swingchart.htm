@@ -11,7 +11,8 @@
 		<script type="text/javascript">
 		var total = <?php echo $total_device['total']; ?>;
 		var total_device = [];
-		<?php foreach($device_array as $device) { 
+		<?php 
+			foreach($device_array as $device) { 
 				echo "total_device['".$device."']=".$total_device[$device]['total'].";";
 			} 
 		?>
@@ -28,21 +29,21 @@
 						   '#1aadce', 
 						   '#910000'
 						],
-				categories = [<?php foreach($device_array as $device){echo "'".$device."',";} ?>],
+				categories = [<?php foreach($device_array as $device) {echo "'".$device."',";} ?>],
 				name = 'Device type',
 				data = [
 					<?php 
-						foreach($device_array as $key => $device){
+						foreach($device_array as $key => $device) {
 							echo "{
 									y:".$total_device[$device]['total'].",
 									color:colors[".$key."],
 									drilldown:{
 										name:'".$device."',
 										categories:[";
-											foreach($server_array as $server){echo "'".$server."',";}
+											foreach($server_array as $server) {echo "'".$server."',";}
 										echo "],
 										data:[";
-											foreach($server_array as $server){
+											foreach($server_array as $server) {
 												echo $total_device[$device][$server].",";
 											}
 										echo "],
