@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Jeu 25 Juillet 2013 à 13:51
+-- Généré le: Ven 26 Juillet 2013 à 09:46
 -- Version du serveur: 5.5.24-log
 -- Version de PHP: 5.4.3
 
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `ip_coordinate` (
   `date` date NOT NULL,
   PRIMARY KEY (`idIP_Coordinate`),
   KEY `ip` (`ip`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1053 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -70,14 +70,14 @@ CREATE TABLE IF NOT EXISTS `marker` (
   `volume` int(11) NOT NULL,
   PRIMARY KEY (`idMarker`),
   KEY `time` (`time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39503 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 DELIMITER $$
 --
 -- Événements
 --
-CREATE DEFINER=`root`@`localhost` EVENT `e_daily` ON SCHEDULE EVERY 1 DAY STARTS '2013-07-16 10:15:41' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clear old ip_coordinate' DO BEGIN
-        DELETE FROM `idIP_Coordinate` where `date` < DATE_SUB(curdate(), INTERVAL 30 DAY);
+CREATE DEFINER=`root`@`localhost` EVENT `e_daily` ON SCHEDULE EVERY 1 DAY STARTS '2013-07-26 10:00:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clear old ip_coordinate' DO BEGIN
+        DELETE FROM `ip_coordinate` where `date` < DATE_SUB(curdate(), INTERVAL 30 DAY);
       END$$
 
 DELIMITER ;

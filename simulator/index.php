@@ -31,14 +31,16 @@
 
 	function genDevice() {
 		$num = rand(1,100);
-		if($num <=30)
-			return "ios";
-		else if($num > 35 && $num <=78)
-			return "android";
+		if($num <=20)
+			return "iPhone";
+		else if($num > 20 && $num <=45)
+			return "iPad";
+		else if($num > 45 && $num <=78)
+			return "Android";
 		else if($num > 78 && $num <=91)
-			return "wp";
+			return "W32";
 		else
-			return "server";
+			return "Server";
 	}
 	function genServer() {
 		$num = rand(1,4);

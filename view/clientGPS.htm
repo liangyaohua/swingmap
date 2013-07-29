@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SwingMap | clientGPS</title>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<link rel="icon" type="image/png" href="<?php echo HOST;?>/view/img/favicon.png"/>
+		<link rel="stylesheet" media="screen" href="<?php echo HOST;?>/view/css/bootstrap.min.css">
+	</head>
+	<body>
+		<table>
+			<tr><th>idClient_Coordinate</th><th>idClient</th><th>lat</th><th>lng</th></tr>
+			<?php
+				foreach($clientGPS as $key => $value) {
+					echo "<tr><td>".$key."</td><td>".$value['idClient']."</td><td>".$value['lat']."</td><td>".$value['lng']."</td></tr>";
+				}
+			?>
+		<table>
+		<table id="table">
+		</table>
+		<button id="add" class="btn btn-small" type="button"><i class="icon-plus"></i></button>
+		<div id="more"></div>
+		<button id="submit" class="btn btn-small" type="button"><i class="icon-ok"></i></button>
+		<div id="result" class="alert alert-info"></div>
+	</body>
+	<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#add").click(function(){
+				$("#more").html("idClient: <input type='text' id='idClient'></input> lat: <input type='text' id='lat'></input> lng: <input type='text' id='lng'></input><br>");
+				});
+			
+			$("#submit").click(function(){
+				var idClient = $("#idClient").val();
+				var lat = $("#lat").val();
+				var lng = $("#lng").val();
+				var data = '[{"idClient":"' + idClient + '","lat":' + lat + ',"lng":' + lng + '}]';
+				var downloadUrl = "<?php echo HOST;?>/controller/addClientGPS.php?data=" + data;
+				//alert(downloadUrl);
+				// ajax
+				var xmlhttp;
+				if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+					xmlhttp = new XMLHttpRequest();
+				} else {// code for IE6, IE5
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange = function() {
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						$("#result").html(xmlhttp.responseText);
+						$("#result").show();
+					} else {
+						$("#result").html("loading...");
+						$("#result").show();
+					}
+				}
+				xmlhttp.open("GET", downloadUrl, true);
+				xmlhttp.send();
+			});
+			$("#result").hide();
+		});
+	</script>
+</html>

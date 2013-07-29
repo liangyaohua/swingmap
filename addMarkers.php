@@ -5,8 +5,10 @@
 	if(isset($_GET['data']) && $_GET['data'] != "") {
 		$data = $_GET['data'];
 		$markersArray = json_decode($data);
+		if($markersArray == null)
+			die($data."<br>data is not a valid json string ");
 	} else {
-		die("error: empty message");
+		die("data is empty");
 	}
 	
 	$query = "insert into marker (time,lat,lng,ip,device,idDevice,idClient,idServer,volume) values ";
@@ -22,7 +24,7 @@
 		$idClient = isset($markersArray[$i]->idClient)?$markersArray[$i]->idClient:"";
 		$idServer = isset($markersArray[$i]->idServer)?$markersArray[$i]->idServer:"";
 		$volume = isset($markersArray[$i]->volume)?$markersArray[$i]->volume:0;
-		if(isValidDateTime($time) && filter_var($ip, FILTER_VALIDATE_IP) && $device != "" && $idDevice != "" && $idClient != "" && $idServer != "" && $volume != 0) {
+		if($time != "" && filter_var($ip, FILTER_VALIDATE_IP) && $device != "" && $idDevice != "" && $idClient != "" && $idServer != "") {
 			$query .= "('".$time."','".$lat."','".$lng."','".$ip."','".$device."','".$idDevice."','".$idClient."','".$idServer."','".$volume."'), ";
 		} else {
 			array_push($fail, $i);
@@ -33,9 +35,10 @@
 	
 	try {
 		$result = $connection->exec($query);
-		echo "Insertion success: ".$result." messages<br>";
+		if($result)
+			echo "Insertion success: ".$result." messages<br>";
 		if(sizeof($fail) > 0) {
-			echo "Failed: ";
+			echo "Failed: please check if the following message is correct"."<br>";
 			foreach($fail as $value) {
 				echo "message ".$value.": ".json_encode($markersArray[$value])."<br>";
 			}
@@ -43,15 +46,4 @@
 	} catch (PDOException $e) {
 		die('Insertion failed: '.$e->getMessage()."\n");
 	}
-	
-	// function of datetime validation
-	function isValidDateTime($dateTime) 
-	{ 
-		if (preg_match("/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/", $dateTime, $matches)) { 
-			if (checkdate($matches[2], $matches[3], $matches[1])) { 
-				return true; 
-			} 
-		} 
-		return false; 
-	} 
 ?>

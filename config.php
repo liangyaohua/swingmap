@@ -6,6 +6,6 @@
 	
 	$simulator = false;
 	
-	$device_array = array("ios", "android", "wp", "server");
+	$device_array = array("iPhone", "iPad", "Android", "W32", "Server");
 	$server_array = array("A", "B", "C", "D");
 ?>

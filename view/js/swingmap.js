@@ -118,16 +118,17 @@ function markerStyle(markerStyleOption, device) {
 // color pin style
 function colorMarker(device) {
 	switch(device) {
-		case "ios":
+		case "iPhone":
+		case "iPad":
 			return imgUrl + 'red-dot.png';
 			break;
-		case "android":
+		case "Android":
 			return imgUrl + 'green-dot.png';
 			break;
-		case "wp":
+		case "W32":
 			return imgUrl + 'blue-dot.png';
 			break;
-		case "server":
+		case "Server":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24));
 			break;
 	}
@@ -136,16 +137,17 @@ function colorMarker(device) {
 // png icon
 function iconMarker(device) {
 	switch(device) {
-		case "ios":
+		case "iPhone":
+		case "iPad":
 			return imgUrl + 'ios.png';
 			break;
-		case "android":
+		case "Android":
 			return imgUrl + 'android.png';
 			break;
-		case "wp":
+		case "W32":
 			return imgUrl + 'windows.png';
 			break;
-		case "server":
+		case "Server":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24,24));
 			break;
 	}
@@ -154,16 +156,17 @@ function iconMarker(device) {
 // svg icon
 function svgMarker(device,map_zoom) {
 	switch(device) {
-		case "ios":
+		case "iPhone":
+		case "iPad":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg',null, null, null, new google.maps.Size(500*0.05*map_zoom/6,550*0.05*map_zoom/6));
 			break;
-		case "android":
+		case "Android":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/f/f1/Android_sample.svg',null, null, null, new google.maps.Size(262*0.1*map_zoom/6,372*0.1*map_zoom/6));
 			break;
-		case "wp":
+		case "W32":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/6/6c/Windows_Phone_7.5_logo.svg',null, null, null, new google.maps.Size(44*0.5*map_zoom/6,44*0.5*map_zoom/6));
 			break;
-		case "server":
+		case "Server":
 			return new google.maps.MarkerImage('http://upload.wikimedia.org/wikipedia/commons/c/c1/AWS_Simple_Icons_Non-Service_Specific_Traditional_Server.svg',null, null, null, new google.maps.Size(24*map_zoom/6,24*map_zoom/6));
 			break;
 	}
@@ -173,16 +176,17 @@ function svgMarker(device,map_zoom) {
 function getCircle(device,volume) {
 	var _color;
 	switch(device) {
-		case "ios":
+		case "iPhone":
+		case "iPad":
 			_color = 'red';
 			break;
-		case "android":
+		case "Android":
 			_color = 'green';
 			break;
-		case "wp":
+		case "W32":
 			_color = 'blue';
 			break;
-		case "server":
+		case "Server":
 			_color = 'orange';
 			break;
 	}
