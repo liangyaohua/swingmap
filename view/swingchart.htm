@@ -44,7 +44,10 @@
 										echo "],
 										data:[";
 											foreach($server_array as $server) {
-												echo $total_device[$device][$server].",";
+												if(isset($total_device[$device][$server]))
+													echo $total_device[$device][$server].",";
+												else
+													echo "0,";
 											}
 										echo "],
 										color:colors[".$key."]

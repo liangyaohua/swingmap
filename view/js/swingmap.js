@@ -24,7 +24,7 @@ function initialize() {
 		center: new google.maps.LatLng(map_center_lat, map_center_lng),
 		styles: styles,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
-		mapTypeControl: false,
+		mapTypeControl: true,
 		streetViewControl: false
 	});
 }
