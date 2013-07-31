@@ -6,6 +6,6 @@
 	
 	$simulator = false;
 	
-	$device_array = array("iPhone", "iPad", "Android", "W32", "Server");
-	$server_array = array("A", "B", "C", "D");
+	$device_array = array("iPhone", "iPad", "Android", "W32", "Server", "Undetermined");
+	$server_array = array("SRV-DEV", "SRV-WEB10", "SWING-WEB11", "SWING-WEB8", "SRV-SWINGBOX", "SWING-WEB7-DE", "SRV-UNA77", "SWING-WEB9", "SWING-DEMO","SRV-POCKET-FRON");
 ?>

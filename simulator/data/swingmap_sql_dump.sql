@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Ven 26 Juillet 2013 à 09:46
+-- Généré le: Lun 29 Juillet 2013 à 11:40
 -- Version du serveur: 5.5.24-log
 -- Version de PHP: 5.4.3
 
@@ -26,6 +26,7 @@ SET time_zone = "+00:00";
 -- Structure de la table `client_coordinate`
 --
 
+DROP TABLE IF EXISTS `client_coordinate`;
 CREATE TABLE IF NOT EXISTS `client_coordinate` (
   `idClient_Coordinate` int(11) NOT NULL AUTO_INCREMENT,
   `idClient` varchar(50) NOT NULL,
@@ -33,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `client_coordinate` (
   `lng` float(10,6) NOT NULL,
   PRIMARY KEY (`idClient_Coordinate`),
   KEY `idClient` (`idClient`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=53 ;
 
 -- --------------------------------------------------------
 
@@ -41,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `client_coordinate` (
 -- Structure de la table `ip_coordinate`
 --
 
+DROP TABLE IF EXISTS `ip_coordinate`;
 CREATE TABLE IF NOT EXISTS `ip_coordinate` (
   `idIP_Coordinate` int(11) NOT NULL AUTO_INCREMENT,
   `ip` varchar(20) NOT NULL,
@@ -49,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `ip_coordinate` (
   `date` date NOT NULL,
   PRIMARY KEY (`idIP_Coordinate`),
   KEY `ip` (`ip`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=64 ;
 
 -- --------------------------------------------------------
 
@@ -57,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `ip_coordinate` (
 -- Structure de la table `marker`
 --
 
+DROP TABLE IF EXISTS `marker`;
 CREATE TABLE IF NOT EXISTS `marker` (
   `idMarker` int(11) NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL,
@@ -70,17 +73,7 @@ CREATE TABLE IF NOT EXISTS `marker` (
   `volume` int(11) NOT NULL,
   PRIMARY KEY (`idMarker`),
   KEY `time` (`time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-DELIMITER $$
---
--- Événements
---
-CREATE DEFINER=`root`@`localhost` EVENT `e_daily` ON SCHEDULE EVERY 1 DAY STARTS '2013-07-26 10:00:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clear old ip_coordinate' DO BEGIN
-        DELETE FROM `ip_coordinate` where `date` < DATE_SUB(curdate(), INTERVAL 30 DAY);
-      END$$
-
-DELIMITER ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=101 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

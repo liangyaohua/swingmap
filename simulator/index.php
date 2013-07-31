@@ -13,7 +13,7 @@
 		$ip = mt_rand(0,223).'.'.mt_rand(0,255).'.'.mt_rand(0,255).'.'.mt_rand(0,255);
 		$device = genDevice();
 		$idDevice = $device.mt_rand(1,9999);
-		$idClient = genClient().mt_rand(1,9999).genServer();
+		$idClient = genClient().mt_rand(1,9999);
 		$idServer = genServer();
 		$volume = mt_rand(1024,102400);
 
@@ -31,25 +31,33 @@
 
 	function genDevice() {
 		$num = rand(1,100);
-		if($num <=20)
+		if($num <= 15)
 			return "iPhone";
-		else if($num > 20 && $num <=45)
+		else if($num > 15 && $num <= 30)
 			return "iPad";
-		else if($num > 45 && $num <=78)
+		else if($num > 30 && $num <= 52)
 			return "Android";
-		else if($num > 78 && $num <=91)
+		else if($num > 52 && $num <= 70)
 			return "W32";
-		else
+		else if($num > 70 && $num <= 79)
 			return "Server";
+		else
+			return "Undetermined";
 	}
 	function genServer() {
-		$num = rand(1,4);
+		$num = rand(1,10);
 		switch($num)
 		{
-			case 1:	return "A"; break;
-			case 2: return "B"; break;
-			case 3: return "C"; break;
-			case 4: return "D"; break;
+			case 1:	return "SRV-DEV"; break;
+			case 2: return "SRV-WEB10"; break;
+			case 3: return "SWING-WEB11"; break;
+			case 4: return "SWING-WEB8"; break;
+			case 5: return "SRV-SWINGBOX"; break;
+			case 6: return "SWING-WEB7-DE"; break;
+			case 7: return "SRV-UNA77"; break;
+			case 8: return "SWING-WEB9"; break;
+			case 9: return "SWING-DEMO"; break;
+			case 10: return "SRV-POCKET-FRON"; break;
 		}
 	}
 	function genClient() {
