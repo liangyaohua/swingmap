@@ -77,12 +77,34 @@ function addMarker(User) {
 	// push marker to the markersArray
 	markersArray.push(marker);
 	
+	var diff = Math.abs(new Date() - new Date(time.replace(/-/g,'/')));
+	diff = timeDiff(diff/1000);
+	
 	// Content of infoWindow
-	var contentString = '<div id="infoWindow"><p class="lead">' + idClient + '</p><p>' + time + '</p><p>idDevice: ' + idDevice + '</p><p>device: ' + device + '</p><p>idServer: ' + idServer + '</p><p>ip: ' + ip + '</p><p>volume: ' + volume + '</p></div>';
+	var contentString = '<div id="infoWindow"><p class="lead">' + idClient + '</p><p>' + diff + '</p><p>idDevice: ' + idDevice + '</p><p>device: ' + device + '</p><p>idServer: ' + idServer + '</p><p>ip: ' + ip + '</p><p>volume: ' + volume + '</p></div>';
 	
 	bindInfoWindow(marker, map, infoWindow,contentString);
 }
+
+// show time ago
+function timeDiff(diff) {
+	var day = Math.floor(diff/86400);
+	var hour = Math.floor((diff%86400)/3600);
+	var min = Math.floor(((diff%86400)%3600)/60);
+	var sec = Math.floor(((diff%86400)%3600)%60);
 	
+	if(day >= 1)
+		return day + 'day ' + hour + 'h ' + min + 'min ' + sec + 's ago';
+	else if(day < 1 && hour >= 1)
+		return hour + 'h ' + min + 'min ' + sec + 's ago';
+	else if(day < 1 && hour < 1 && min >= 1)
+		return min + 'min ' + sec + 's ago';
+	else if(day < 1 && hour < 1 && min < 1)
+		return sec + 's ago';
+	else
+		return '0 s ago';
+}	
+
 // Bind infoWindows to markers
 function bindInfoWindow(marker, map, infoWindow, contentString) {
 	google.maps.event.addListener(marker, 'click', function() {
