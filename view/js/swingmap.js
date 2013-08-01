@@ -78,7 +78,7 @@ function addMarker(User) {
 	markersArray.push(marker);
 	
 	// Content of infoWindow
-	var contentString = '<div id="infoWindow"><p>' + time + '</p><p>ip: ' + ip + '</p><p>device: ' + device + '</p><p>idDevice: ' + idDevice + '</p><p>idClient: ' + idClient + '</p><p>idServer: ' + idServer + '</p><p>volume: ' + volume + '</p></div>';
+	var contentString = '<div id="infoWindow"><p class="lead">' + idClient + '</p><p>' + time + '</p><p>idDevice: ' + idDevice + '</p><p>device: ' + device + '</p><p>idServer: ' + idServer + '</p><p>ip: ' + ip + '</p><p>volume: ' + volume + '</p></div>';
 	
 	bindInfoWindow(marker, map, infoWindow,contentString);
 }

@@ -5,20 +5,20 @@
 		global $connection, $device_array, $server_array;
 		
 		if(in_array($_device, $device_array) && in_array($_server, $server_array)) {
-			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, sum(volume) as volume from marker where device = :device and idServer = :idServer and time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime group by idDevice";
+			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, sum(volume) as volume from marker where device = :device and idServer = :idServer and time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime group by idDevice, idClient";
 			$result = $connection->prepare($sql);
 			$result->bindValue(':device', $_device, PDO::PARAM_STR);
 			$result->bindValue(':idServer', $_server, PDO::PARAM_STR);
 		} else if(in_array($_device, $device_array) && $_server == "") {
-			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, sum(volume) as volume from marker where device = :device and time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime group by idDevice";
+			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, sum(volume) as volume from marker where device = :device and time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime group by idDevice, idClient";
 			$result = $connection->prepare($sql);
 			$result->bindValue(':device', $_device, PDO::PARAM_STR);
 		} else if($_device == "" && in_array($_server, $server_array)) {
-			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, sum(volume) as volume from marker where idServer = :idServer and time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime group by idDevice";
+			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, sum(volume) as volume from marker where idServer = :idServer and time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime group by idDevice, idClient";
 			$result = $connection->prepare($sql);
 			$result->bindValue(':idServer', $_server, PDO::PARAM_STR);
 		} else {
-			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, sum(volume) as volume from marker where time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime group by idDevice";
+			$sql = "select time, lat, lng, ip, device, idDevice, idClient, idServer, sum(volume) as volume from marker where time > DATE_SUB(:datetime, INTERVAL :interval SECOND) and time <= :datetime group by idDevice, idClient";
 			$result = $connection->prepare($sql);
 		}
 		$result->bindValue(':datetime', $_datetime, PDO::PARAM_STR);
