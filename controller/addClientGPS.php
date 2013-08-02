@@ -2,13 +2,13 @@
 	date_default_timezone_set('Europe/Paris');
 	include_once('../model/db_connection.php');
 
-	if(isset($_GET['data']) && $_GET['data'] != "") {
+	if(isset($_GET['data']) && $_GET['data'] != "" && $_GET['data'] != "[]") {
 		$data = $_GET['data'];
 		$clientGPS = json_decode($data);
 		if($clientGPS == null)
-			die($data."<br>data is not a valid json string");
+			die("<div class='alert alert-error'>".$data." is not a valid json string</div>");
 	} else {
-		die("data is empty");
+		die("<div class='alert alert-error'>data is empty</div>");
 	}
 
 	$query = "insert into client_coordinate (idClient,lat,lng) values ";
@@ -30,14 +30,15 @@
 	try {
 		$result = $connection->exec($query);
 		if($result)
-			echo "Insertion success: ".$result." messages<br>";
+			echo "<div class='alert alert-success'>Insertion success: ".$result." messages</div>";
 		if(sizeof($fail) > 0) {
-			echo "Failed: please check if the following message is correct"."<br>";
+			echo "<div class='alert alert-error'>Failed: please check if the following message is correct<br/>";
 			foreach($fail as $value) {
-				echo "message ".$value.": ".json_encode($clientGPS[$value])."<br>";
+				echo "message ".$value.": ".json_encode($clientGPS[$value])."<br/>";
 			}
+			echo "</div>";
 		}
 	} catch (PDOException $e) {
-		die('Insertion failed: '.$e->getMessage()."\n");
+		die("<div class='alert alert-error'>Insertion failed: ".$e->getMessage()."</div>");
 	}
 ?>

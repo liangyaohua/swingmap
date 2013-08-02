@@ -6,59 +6,138 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 		<link rel="icon" type="image/png" href="<?php echo HOST;?>/view/img/favicon.png"/>
-		<link rel="stylesheet" media="screen" href="<?php echo HOST;?>/view/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
+		<style>
+			.table {
+				width: 35%;
+				margin: 10px
+			}
+			.table tbody > tr > td{
+				padding: 0
+			}
+			.btn-group {
+				margin: 5px 5px 5px 10px
+			}
+			input {
+				margin: 2px 0 2px 0
+			}
+			#result {
+				margin: 10px
+			}
+		</style>
 	</head>
 	<body>
-		<table>
-			<tr><th>idClient_Coordinate</th><th>idClient</th><th>lat</th><th>lng</th></tr>
-			<?php
-				foreach($clientGPS as $key => $value) {
-					echo "<tr><td>".$key."</td><td>".$value['idClient']."</td><td>".$value['lat']."</td><td>".$value['lng']."</td></tr>";
-				}
-			?>
-		<table>
-		<table id="table">
-		</table>
-		<button id="add" class="btn btn-small" type="button"><i class="icon-plus"></i></button>
-		<div id="more"></div>
-		<button id="submit" class="btn btn-small" type="button"><i class="icon-ok"></i></button>
-		<div id="result" class="alert alert-info"></div>
+		<div id="result"></div>
+		<div id="clientGPS">
+			<table class="table table-hover">
+				<tr><th>idClient</th><th>lat</th><th>lng</th></tr>
+				<?php
+					foreach($clientGPS as $value) {
+						echo "<tr><td>".$value['idClient']."</td><td>".$value['lat']."</td><td>".$value['lng']."</td></tr>";
+					}
+				?>
+			<table>
+		</div>
+		<div class="btn-group">
+			<button id="add" class="btn btn-primary btn-small" type="button">+</button>
+			<button id="cancel" class="btn btn-primary btn-small" type="button">-</button>
+		</div>
+		<div class="btn-group">
+			<button id="modify" class="btn btn-warning btn-small" type="button">Modify</button>
+			<button id="delete" class="btn btn-danger btn-small" type="button">Delete</button>
+		</div>
+		<div class="btn-group">
+			<button id="submit" class="btn btn-success btn-small" type="button">Submit</button>
+			<button id="refresh" class="btn btn-info btn-small" type="button">Refresh</button>
+		</div>
+		<div class="btn-group">
+			<button id="pre" class="btn btn-primary btn-small" type="button"><</button>
+			<button id="next" class="btn btn-primary btn-small" type="button">></button>
+		</div>
 	</body>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery-1.10.1.min.js"></script>
-	<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
-		$(document).ready(function() {
+		var totalPage = <?php echo $totalPage; ?>;
+		$(document).ready(function(){
+			$("#result").hide();
+			
+			var i = 0;
 			$("#add").click(function(){
-				$("#more").html("idClient: <input type='text' id='idClient'></input> lat: <input type='text' id='lat'></input> lng: <input type='text' id='lng'></input><br>");
-				});
+				$(".table").append("<tr id='new'><td><input type='text' id='idClient" + i + "'></input></td><td><input type='text' id='lat" + i + "'></input></td><td><input type='text' id='lng" + i + "'></input></td><tr>");
+				i++;
+			});
+		
+			$('#cancel').click(function(){
+				$("#new").last().empty().remove();
+			});
 			
 			$("#submit").click(function(){
-				var idClient = $("#idClient").val();
-				var lat = $("#lat").val();
-				var lng = $("#lng").val();
-				var data = '[{"idClient":"' + idClient + '","lat":' + lat + ',"lng":' + lng + '}]';
+				var j;
+				var data = '[';
+				var idClient;
+				var lat;
+				var lng;
+				
+				for(j = 0; j < i-1; j++) {
+					idClient = $("#idClient"+ j).val();
+					lat = $("#lat" + j).val();
+					lng = $("#lng" + j).val();
+					if(idClient != "undefined" && lat != undefined && lng != undefined)
+						data += '{"idClient":"' + idClient + '","lat":' + lat + ',"lng":' + lng + '},';
+				}
+				idClient = $("#idClient"+ j).val();
+				lat = $("#lat" + j).val();
+				lng = $("#lng" + j).val();
+				if(idClient != "undefined" && lat != undefined && lng != undefined)
+					data += '{"idClient":"' + idClient + '","lat":' + lat + ',"lng":' + lng + '}';
+				data += ']';
+				
+				//alert(data);
 				var downloadUrl = "<?php echo HOST;?>/controller/addClientGPS.php?data=" + data;
-				//alert(downloadUrl);
 				// ajax
-				var xmlhttp;
-				if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-					xmlhttp = new XMLHttpRequest();
-				} else {// code for IE6, IE5
-					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-				}
-				xmlhttp.onreadystatechange = function() {
-					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-						$("#result").html(xmlhttp.responseText);
-						$("#result").show();
-					} else {
-						$("#result").html("loading...");
-						$("#result").show();
-					}
-				}
-				xmlhttp.open("GET", downloadUrl, true);
-				xmlhttp.send();
+				ajaxUpdate(downloadUrl, "#result");
+				$("#result").fadeIn();
 			});
-			$("#result").hide();
+			$("#refresh").click(function(){
+				var downloadUrl = "<?php echo HOST;?>/clientGPS.php?page=0&line=20";
+				ajaxUpdate(downloadUrl, "#clientGPS");
+			});
+			var page = 0;
+			$("#next").click(function(){
+				page++;
+				if(page <= totalPage) {
+					var downloadUrl = "<?php echo HOST;?>/clientGPS.php?page=" + page + "&line=20";
+					ajaxUpdate(downloadUrl, "#clientGPS");
+				} else {
+					page--;
+				}
+			});
+			$("#pre").click(function(){
+				page--;
+				if(page >= 0) {
+					var downloadUrl = "<?php echo HOST;?>/clientGPS.php?page=" + page + "&line=20";
+					ajaxUpdate(downloadUrl, "#clientGPS");
+				} else {
+					page++;
+				}
+			});
 		});
+		
+		function ajaxUpdate(downloadUrl, divID) {
+			var xmlhttp;
+			if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+				xmlhttp = new XMLHttpRequest();
+			} else {// code for IE6, IE5
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp.onreadystatechange = function() {
+				if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					$(divID).html(xmlhttp.responseText);
+				}
+			}
+			xmlhttp.open("GET", downloadUrl, true);
+			xmlhttp.send();
+		}
 	</script>
 </html>
