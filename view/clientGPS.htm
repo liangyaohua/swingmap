@@ -8,36 +8,28 @@
 		<link rel="icon" type="image/png" href="<?php echo HOST;?>/view/img/favicon.png"/>
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
 		<style>
-			.table {
-				width: 35%;
-				margin: 10px
+			body {
+				margin: 0 10px 0 10px
+			}
+			#page, .btn-group {
+				margin: 10px 10px 10px 0
 			}
 			.table tbody > tr > td{
-				padding: 0
+				padding: 0 8px 0 8px
 			}
-			.btn-group {
-				margin: 5px 5px 5px 10px
+			input[type="checkbox"] {
+				float: right
 			}
-			input {
-				margin: 2px 0 2px 0
-			}
-			#result {
-				margin: 10px
+			#check {
+				padding: 0;
+				float: right
 			}
 		</style>
 	</head>
 	<body>
-		<div id="result"></div>
-		<div id="clientGPS">
-			<table class="table table-hover">
-				<tr><th>idClient</th><th>lat</th><th>lng</th></tr>
-				<?php
-					foreach($clientGPS as $value) {
-						echo "<tr><td>".$value['idClient']."</td><td>".$value['lat']."</td><td>".$value['lng']."</td></tr>";
-					}
-				?>
-			<table>
-		</div>
+		<h3><p class="text-warning">client_coordinate editable</p></h3>
+		
+		<span>Page: </span><span class="badge" id="page"></span>
 		<div class="btn-group">
 			<button id="add" class="btn btn-primary btn-small" type="button">+</button>
 			<button id="cancel" class="btn btn-primary btn-small" type="button">-</button>
@@ -51,25 +43,37 @@
 			<button id="refresh" class="btn btn-info btn-small" type="button">Refresh</button>
 		</div>
 		<div class="btn-group">
+			<button id="first" class="btn btn-primary btn-small" type="button"><<</button>
 			<button id="pre" class="btn btn-primary btn-small" type="button"><</button>
 			<button id="next" class="btn btn-primary btn-small" type="button">></button>
+			<button id="last" class="btn btn-primary btn-small" type="button">>></button>
 		</div>
+		
+		<div id="clientGPS"></div>
+		
+		<div id="result"></div>
 	</body>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery-1.10.1.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		var totalPage = <?php echo $totalPage; ?>;
+		var page = 0;
+		var i = 0;
 		$(document).ready(function(){
 			$("#result").hide();
 			
-			var i = 0;
+			var downloadUrl = "<?php echo HOST;?>/controller/getClientGPS.php?page=" + page;
+			ajaxUpdate(downloadUrl, "#clientGPS");
+			$("#page").html(1 + "/" + totalPage);
+			
 			$("#add").click(function(){
-				$(".table").append("<tr id='new'><td><input type='text' id='idClient" + i + "'></input></td><td><input type='text' id='lat" + i + "'></input></td><td><input type='text' id='lng" + i + "'></input></td><tr>");
+				$(".table").append("<tr class='new'><td><input type='text' id='idClient" + i + "'></input></td><td><input type='text' id='lat" + i + "'></input></td><td><input type='text' id='lng" + i + "'></input></td><td></td><tr>");
 				i++;
 			});
-		
 			$('#cancel').click(function(){
-				$("#new").last().empty().remove();
+				$(".new").last().remove();
+				if(i>=1)
+					i--;
 			});
 			
 			$("#submit").click(function(){
@@ -94,34 +98,60 @@
 				data += ']';
 				
 				//alert(data);
-				var downloadUrl = "<?php echo HOST;?>/controller/addClientGPS.php?data=" + data;
+				downloadUrl = "<?php echo HOST;?>/controller/addClientGPS.php?data=" + data;
 				// ajax
 				ajaxUpdate(downloadUrl, "#result");
 				$("#result").fadeIn();
 			});
 			$("#refresh").click(function(){
-				var downloadUrl = "<?php echo HOST;?>/clientGPS.php?page=0&line=20";
-				ajaxUpdate(downloadUrl, "#clientGPS");
+				window.location.reload();
 			});
-			var page = 0;
+			
 			$("#next").click(function(){
 				page++;
-				if(page <= totalPage) {
-					var downloadUrl = "<?php echo HOST;?>/clientGPS.php?page=" + page + "&line=20";
+				if(page < totalPage) {
+					downloadUrl = "<?php echo HOST;?>/controller/getClientGPS.php?page=" + page;
 					ajaxUpdate(downloadUrl, "#clientGPS");
+					$("#page").html((page+1) + "/" + totalPage);
 				} else {
-					page--;
+					page = totalPage - 1;
+					$("#page").html(totalPage + "/" + totalPage);
 				}
 			});
 			$("#pre").click(function(){
 				page--;
 				if(page >= 0) {
-					var downloadUrl = "<?php echo HOST;?>/clientGPS.php?page=" + page + "&line=20";
+					downloadUrl = "<?php echo HOST;?>/controller/getClientGPS.php?page=" + page;
 					ajaxUpdate(downloadUrl, "#clientGPS");
+					$("#page").html((page+1) + "/" + totalPage);
 				} else {
-					page++;
+					page = 0;
+					$("#page").html(1 + "/" + totalPage);
 				}
 			});
+			$("#first").click(function(){
+				downloadUrl = "<?php echo HOST;?>/controller/getClientGPS.php";
+				ajaxUpdate(downloadUrl, "#clientGPS");
+				$("#page").html(1 + "/" + totalPage);
+				page = 0;
+			});
+			$("#last").click(function(){
+				downloadUrl = "<?php echo HOST;?>/controller/getClientGPS.php?page=" + (totalPage-1);
+				ajaxUpdate(downloadUrl, "#clientGPS");
+				$("#page").html(totalPage + "/" + totalPage);
+				page = totalPage - 1;
+			});
+			
+			$("#add,#cancel,#refresh,#first,#pre,#next,#last").click(function(){
+				$("#result").hide();
+			});
+			
+			/*$("#check").click(function(){
+				$(":checkbox").attr("checked", true);
+				$("#check").html("none");
+			});
+			$("#modify").click();*/
+			
 		});
 		
 		function ajaxUpdate(downloadUrl, divID) {

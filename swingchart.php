@@ -16,4 +16,5 @@
 	//die();
 
 	include_once(ROOT_PATH.'view/swingchart.htm');
+	$connection = null;
 ?>

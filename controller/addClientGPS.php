@@ -41,4 +41,5 @@
 	} catch (PDOException $e) {
 		die("<div class='alert alert-error'>Insertion failed: ".$e->getMessage()."</div>");
 	}
+	$connection = null;
 ?>

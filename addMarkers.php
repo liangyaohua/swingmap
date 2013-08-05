@@ -46,4 +46,5 @@
 	} catch (PDOException $e) {
 		die('Insertion failed: '.$e->getMessage()."\n");
 	}
+	$connection = null;
 ?>
