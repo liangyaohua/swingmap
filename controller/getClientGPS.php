@@ -7,11 +7,11 @@
 	
 	$clientGPS = get_clientGPS($page, $line);
 	
-	echo '<table class="table table-hover"><tr><th>idClient</th><th>lat</th><th>lng</th><th><button type="button" class="btn btn-link" id="check">all</button></th></tr>';
+	echo "<table class='table table-hover'><tr><th>idClient</th><th>lat</th><th>lng</th><th></th></tr>";
 	foreach($clientGPS as $value) {
 		echo "<tr><td>".$value['idClient']."</td><td>".$value['lat']."</td><td>".$value['lng']."</td><td><input type='checkbox'></td></tr>";
 	}			
-	echo '<table>';
+	echo "<table>";
 	
 	$connection = null;
 ?>
