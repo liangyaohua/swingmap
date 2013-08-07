@@ -11,7 +11,7 @@ var imgUrl;	// http://hostname/view/img/
 
 var geojson; // geojson obje
 var markersArray = [];
-var markerStyleOption; // color, icon, svg, circle
+var markerStyleOption; // default, cluster, colour pin, png, svg, circle
 var infoWindow = new google.maps.InfoWindow;
 var showInfoWindowFreq = 2000;
 
@@ -132,11 +132,11 @@ function showInfoWindow() {
 // Markers style option
 function markerStyle(markerStyleOption, device) {
 	switch(markerStyleOption) {
-		case "color":
-			return colorMarker(device);
+		case "colour":
+			return colourMarker(device);
 			break;
-		case "icon":
-			return iconMarker(device);
+		case "png":
+			return pngMarker(device);
 			break;
 		case "svg":
 			return svgMarker(device,map_zoom);
@@ -147,7 +147,7 @@ function markerStyle(markerStyleOption, device) {
 }
 
 // color pin style
-function colorMarker(device) {
+function colourMarker(device) {
 	switch(device) {
 		case "iPhone":
 			return imgUrl + 'red-dot.png';
@@ -171,7 +171,7 @@ function colorMarker(device) {
 }
 
 // png icon
-function iconMarker(device) {
+function pngMarker(device) {
 	switch(device) {
 		case "iPhone":
 		case "iPad":
