@@ -42,6 +42,8 @@
 				</select>
 				Marker Style:
 				<select id="markerStyleOption" class="input-small">
+					<option value="default">default</option>
+					<option value="cluster">cluster</option>
 					<option value="color">color pin</option>
 					<option value="icon">png icon</option>
 					<option value="svg">svg icon</option>
@@ -93,6 +95,7 @@
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/bootstrap-datetimepicker.min.js"></script>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/fancybox/jquery.fancybox.js"></script>
+	<script type="text/javascript" src="<?php echo HOST;?>/view/js/markercluster.js"></script>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/swingmap.js"></script>
 	<script type="text/javascript">
 		google.maps.visualRefresh = true;
@@ -139,6 +142,7 @@
 		var autoRefreshFreq = 30000;
 		var geojsonUrl = "<?php echo HOST;?>/controller/geojson.php";
 		var imgUrl = "<?php echo HOST;?>/view/img/";
+
 		$(document).ready(function() {
 			$('#play').click();
 			$("#fancybox-button").fancybox({

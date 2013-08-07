@@ -15,18 +15,22 @@ var markerStyleOption; // color, icon, svg, circle
 var infoWindow = new google.maps.InfoWindow;
 var showInfoWindowFreq = 2000;
 
+var mcOptions = {gridSize: 50, maxZoom: 15};
+var mc; // marker cluster
+
 // Google Map initialization
 function initialize() {
 	map = new google.maps.Map(document.getElementById(map_id), {
 		zoom: map_zoom,
-		maxZoom: 9,
-		minZoom: 3,
+		maxZoom: 10,
+		minZoom: 2,
 		center: new google.maps.LatLng(map_center_lat, map_center_lng),
 		styles: styles,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 		mapTypeControl: true,
 		streetViewControl: false
 	});
+	mc = new MarkerClusterer(map);
 }
 
 // Clear markers
@@ -35,6 +39,7 @@ function clearOverlays() {
 		markersArray[i].setMap(null);
 	}
 	markersArray = [];
+	mc.clearMarkers();
 }
 
 // Loop through the results array and place a marker for each
@@ -52,6 +57,8 @@ function setMarkers(geojson) {
 			markersArray[i].setMap(map);
 		}
 	}
+	if(markerStyleOption == "cluster")
+		mc = new MarkerClusterer(map, markersArray, mcOptions);
 }
 
 // Create and add marker
@@ -134,12 +141,13 @@ function markerStyle(markerStyleOption, device) {
 		case "svg":
 			return svgMarker(device,map_zoom);
 			break;
+		default:
+			return imgUrl + 'red-dot.png';
 	}
 }
 
 // color pin style
 function colorMarker(device) {
-	/*
 	switch(device) {
 		case "iPhone":
 			return imgUrl + 'red-dot.png';
@@ -160,8 +168,6 @@ function colorMarker(device) {
 			return imgUrl + 'yellow-dot.png';
 			break;
 	}
-	*/
-	return imgUrl + 'red-dot.png';
 }
 
 // png icon
