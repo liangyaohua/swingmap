@@ -26,20 +26,18 @@
 	}
 	$query = substr($query,0,-2); // remove the last comma
 	//die($query);
-	
-	try {
-		$result = $connection->exec($query);
-		if($result)
-			echo "<div class='alert alert-success'>Insertion success: ".$result." messages</div>";
+	$result = $connection->exec($query);
+	if($result) {
+		echo "<div class='alert alert-success'>insertion success: ".$result." messages</div>";
 		if(sizeof($fail) > 0) {
-			echo "<div class='alert alert-error'>Failed: please check if the following message is correct<br/>";
+			echo "<div class='alert alert-danger'>failed: please check if the following message is correct<br/>";
 			foreach($fail as $value) {
 				echo "message ".$value.": ".json_encode($clientGPS[$value])."<br/>";
 			}
 			echo "</div>";
 		}
-	} catch (PDOException $e) {
-		die("<div class='alert alert-error'>Insertion failed: ".$e->getMessage()."</div>");
+	} else {
+		die("<div class='alert alert-error'>something wrong</div>");
 	}
 	$connection = null;
 ?>

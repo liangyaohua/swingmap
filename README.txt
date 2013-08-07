@@ -2,16 +2,19 @@ SwingMap V1.0
 -------------
 swingmap
 	- index.php			
-	- config.php	// parameters configuration
+	- config.php		// parameters configuration
 	- addMarkers.php	// add markers api
 	- swingchart.php	// statistics chart
+	- clientGPS.php		// clientGPS editable
 	- model
-		- db_connection.php	// database connection
-		- get_geojson.php	// function of generating the geojson object
+		- db_connection.php		// database connection
+		- get_geojson.php		// function of generating the geojson object
 		- get_total_device.php	// get statistic data
+		- get_clientGPS			// get client coordinate table
 	- view
 		- swingmap.htm		// map ui
 		- swingchart.htm	// chart ui
+		- clientGPS.htm		// editable ui
 		- js
 			- swingmap.js	// map functions 
 			- jquery-1.10.1.min.js
@@ -19,6 +22,7 @@ swingmap
 			- bootstrap-datetimepicker.min.js
 			- exporting.js
 			- highcharts.js
+			- markercluster.js
 		- css
 			- swingmap.css
 			- bootstrap.min.css
@@ -26,7 +30,11 @@ swingmap
 		- img
 		- fancybox	//fancybox lib
 	- controller
-		- geojson.php	// get the requested geojson
+		- geojson.php
+		- getClientGPS.php
+		- addClientGPS.php
+		- getList.php
+		- request.php	// for update and delete client_coordinate table
 	- simulator
 		- index.php
 		- simu.bat		// simulator script file for windows 

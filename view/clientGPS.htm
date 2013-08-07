@@ -11,21 +11,21 @@
 			body {
 				margin: 0 10px 0 10px
 			}
-			#page, #refresh, #check, .btn-group {
+			#page, #refresh, .btn-group {
 				margin: 10px 10px 10px 0
 			}
 			.table tbody > tr > td{
 				padding: 0 8px 0 8px
 			}
-			input[type="checkbox"] {
-				float: right
+			#submit {
+				margin-left: 10px
 			}
 		</style>
 	</head>
 	<body>
 		<h3><p class="text-warning">client_coordinate editable</p></h3>
 		
-		<span>Page: </span><span class="badge" id="page">1/<?php echo $totalPage; ?></span>
+		<span>Page: </span><span class="badge" id="page"><?php echo ($page+1)."/".$totalPage; ?></span>
 		
 		<div class="btn-group">
 			<button id="first" class="btn btn-primary btn-small" type="button"><<</button>
@@ -35,36 +35,34 @@
 		</div>
 		
 		<div class="btn-group">
-			<button id="more" class="btn btn-warning btn-small" type="button">+</button>
-			<button id="less" class="btn btn-warning btn-small" type="button">-</button>
+			<button id="more" class="btn btn-primary btn-small" type="button">+</button>
+			<button id="less" class="btn btn-primary btn-small" type="button">-</button>
 		</div>
 		
 		<div class="btn-group">
 			<button id="insert" class="btn btn-success btn-small" type="button">Insert</button>
-			<!--button id="modify" class="btn btn-warning btn-small" type="button">Modify</button-->
+			<button id="modify" class="btn btn-warning btn-small" type="button">Modify</button>
 			<button id="delete" class="btn btn-danger btn-small" type="button">Delete</button>
 		</div>
 		
 		<button id="refresh" class="btn btn-info btn-small" type="button">Refresh</button>
-		<button id="check" class="btn btn-link btn-small" type="button">Check all</button>
 
 		<div id="clientGPS"></div>
+		<div id="sql"  class='alert alert-info'></div>
 		<div id="result"></div>
-		<code id="query"></code>
 	</body>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/jquery-1.10.1.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		var totalPage = <?php echo $totalPage; ?>;
-		var page = 0;
+		var page = <?php echo $page; ?>;
 		var i = 0;
 		$(document).ready(function(){
 			$("#result").hide();
-			$("#query").hide();
+			$("#sql").hide();
 			
 			var downloadUrl = "<?php echo HOST;?>/controller/getClientGPS.php?page=" + page;
 			ajaxUpdate(downloadUrl, "#clientGPS");
-			//$("#page").html(1 + "/" + totalPage);
 			
 			$("#next").click(function(){
 				page++;
@@ -102,13 +100,15 @@
 			});
 			
 			$("#more").click(function(){
-				$(".table").append("<tr class='new'><td><input type='text' id='idClient" + i + "'></input></td><td><input type='text' id='lat" + i + "'></input></td><td><input type='text' id='lng" + i + "'></input></td><td></td><tr>");
+				$(".table").append("<tr class='new'><td><input type='text' id='idClient" + i + "'></td><td><input type='text' id='lat" + i + "'></td><td><input type='text' id='lng" + i + "'></td><td></td><tr>");
 				i++;
+				$("#sql").hide();
 			});
 			$('#less').click(function(){
 				$(".new").last().remove();
 				if(i>=1)
 					i--;
+				$("#sql").hide();
 			});
 			
 			$("#insert").click(function(){
@@ -123,13 +123,13 @@
 					lat = $("#lat" + j).val();
 					lng = $("#lng" + j).val();
 					if(idClient != "undefined" && lat != undefined && lng != undefined)
-						data += '{"idClient":"' + idClient + '","lat":' + lat + ',"lng":' + lng + '},';
+						data += '{"idClient":"' + idClient + '","lat":"' + lat + '","lng":"' + lng + '"},';
 				}
 				idClient = $("#idClient"+ j).val();
 				lat = $("#lat" + j).val();
 				lng = $("#lng" + j).val();
 				if(idClient != "undefined" && lat != undefined && lng != undefined)
-					data += '{"idClient":"' + idClient + '","lat":' + lat + ',"lng":' + lng + '}';
+					data += '{"idClient":"' + idClient + '","lat":"' + lat + '","lng":"' + lng + '"}';
 				data += ']';
 				
 				//alert(data);
@@ -137,32 +137,36 @@
 				// ajax
 				ajaxUpdate(downloadUrl, "#result");
 				$("#result").fadeIn();
+				$("#sql").hide();
 			});
-			/*$("#modify").click(function(){});
+			$("#modify").click(function(){
+				$("#sql").html("update client_coordinate set lat = <input type='text' id='lat'> and lng = <input type='text' id='lng'> where idClient = <input type='text' id='idClient'><button id='submit' class='btn btn-success btn-small' type='button'>Submit</button>");
+				$("#sql").fadeIn();
+				$("#submit").click(function(){
+					var lat = $("#lat").val();
+					var lng = $("#lng").val();
+					var idClient = $("#idClient").val();
+					downloadUrl = "<?php echo HOST;?>/controller/request.php?cmd=update&client=" + idClient + "&lat=" + lat + "&lng=" + lng;
+					ajaxUpdate(downloadUrl, "#result");
+					$("#result").fadeIn();
+				});
+			});
 			$("#delete").click(function(){
-				$("#query").html("test");
-				$("#query").fadeIn();
+				$("#sql").html("delete from client_coordinate where idClient = <input type='text' id='idClient'><button id='submit' class='btn btn-success btn-small' type='button'>Submit</button>");
+				$("#sql").fadeIn();
+				$("#submit").click(function(){
+					var idClient = $("#idClient").val();
+					downloadUrl = "<?php echo HOST;?>/controller/request.php?cmd=delete&client=" + idClient;
+					ajaxUpdate(downloadUrl, "#result");
+					$("#result").fadeIn();
+				});
 			});
-			
-			$("input[type='checkbox']").prop("checked", function(){
-				$(this).parent().html().addClass("del");
-			});*/
 			
 			$("#refresh").click(function(){
-				window.location.reload();
+				window.location.href = "<?php echo HOST;?>/clientGPS.php?page=" + (page+1);
 			});
 			
-			$("#check").click(function(){
-				if($("#check").html()=="Check all") {
-					$(":checkbox").prop("checked", true);
-					$("#check").html("Uncheck all");
-				} else {
-					$(":checkbox").prop("checked", false);
-					$("#check").html("Check all");
-				}
-			});
-			
-			$("#more,#less,#refresh,#first,#pre,#next,#last").click(function(){
+			$("#more,#less,#refresh,#first,#pre,#next,#last,#modify,#delete").click(function(){
 				$("#result").hide();
 			});
 		});
