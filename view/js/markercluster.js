@@ -184,16 +184,14 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   }
 }
 
-
+var imgUrl;	// http://hostname/view/img/
 /**
  * The marker cluster image path.
  *
  * @type {string}
  * @private
  */
-MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ =
-    'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/' +
-    'images/m';
+MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ = imgUrl + 'm';
 
 
 /**
