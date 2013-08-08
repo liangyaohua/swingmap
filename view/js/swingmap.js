@@ -18,6 +18,8 @@ var showInfoWindowFreq = 2000;
 var mcOptions = {gridSize: 50, maxZoom: 15};
 var mc; // marker cluster
 
+var latLngBounds = new google.maps.LatLngBounds();
+
 // Google Map initialization
 function initialize() {
 	map = new google.maps.Map(document.getElementById(map_id), {
@@ -57,6 +59,12 @@ function setMarkers(geojson) {
 			markersArray[i].setMap(map);
 		}
 	}
+	// auto fit zoom and center
+	if(!latLngBounds.isEmpty()) {
+		map.fitBounds(latLngBounds);
+		map.setCenter(latLngBounds.getCenter());
+	}
+	
 	if(markerStyleOption == "cluster")
 		mc = new MarkerClusterer(map, markersArray, mcOptions);
 }
@@ -83,6 +91,9 @@ function addMarker(User) {
 	
 	// push marker to the markersArray
 	markersArray.push(marker);
+	
+	// push latLng to latLngBounds
+	latLngBounds.extend(latLng);
 	
 	var diff = Math.abs(new Date() - new Date(time.replace(/-/g,'/')));
 	diff = timeDiff(diff/1000);
