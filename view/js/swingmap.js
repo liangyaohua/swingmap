@@ -18,7 +18,7 @@ var showInfoWindowFreq = 2000;
 var mcOptions = {gridSize: 50, maxZoom: 15};
 var mc; // marker cluster
 
-var latLngBounds = new google.maps.LatLngBounds();
+var latLngBounds;
 
 // Google Map initialization
 function initialize() {
@@ -42,11 +42,14 @@ function clearOverlays() {
 	}
 	markersArray = [];
 	mc.clearMarkers();
+	delete latLngBounds;
 }
 
 // Loop through the results array and place a marker for each
 // set of coordinates.
 function setMarkers(geojson) {
+	latLngBounds = new google.maps.LatLngBounds();
+	
 	for (var i = 0; i < geojson.features.length; i++) {
 		var User = geojson.features[i];
 		var lat = User.geometry.coordinates[1];
