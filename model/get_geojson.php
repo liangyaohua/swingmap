@@ -4,7 +4,7 @@
 	function get_geojson($_device, $_server, $_interval, $_datetime) {
 		global $connection, $device_array, $server_array;
 		
-		$sql = "SELECT MAX(m.`time`) AS time, MAX(m.`lat`) AS lat_marker, MAX(m.`lng`) AS lng_marker, MAX(cc.`lat`) AS lat_cc, MAX(cc.`lng`) AS lng_cc, MAX(ip.`lat`) AS lat_ip, MAX(ip.`lng`) AS lng_ip, MAX(m.`ip`) AS ip, MAX(m.`device`) AS device, m.`idDevice`, m.`idClient`, MAX(m.`idServer`) AS idServer, SUM(m.`volume`) AS volume FROM `marker` m LEFT JOIN `client_coordinate` cc ON cc.`idClient`= m.`idClient` LEFT JOIN `ip_coordinate` ip ON ip.`ip`= m.`ip` WHERE `time` BETWEEN DATE_SUB(:datetime, INTERVAL :interval SECOND) AND :datetime GROUP BY m.`idDevice`, m.`idClient`";
+		$sql = "SELECT MAX(m.`time`) AS `time`, MAX(m.`lat`) AS lat_marker, MAX(m.`lng`) AS lng_marker, MAX(cc.`lat`) AS lat_cc, MAX(cc.`lng`) AS lng_cc, MAX(ip.`lat`) AS lat_ip, MAX(ip.`lng`) AS lng_ip, MAX(m.`ip`) AS ip, MAX(m.`device`) AS device, m.`idDevice`, m.`idClient`, MAX(m.`idServer`) AS idServer, SUM(m.`volume`) AS volume FROM `marker` m FORCE INDEX(`time`) LEFT JOIN `client_coordinate` cc ON cc.`idClient`= m.`idClient` LEFT JOIN `ip_coordinate` ip ON ip.`ip`= m.`ip` WHERE `time` BETWEEN DATE_SUB(:datetime, INTERVAL :interval SECOND) AND :datetime GROUP BY m.`idDevice`, m.`idClient`";
 		
 		if(in_array($_device, $device_array) && in_array($_server, $server_array)) {
 			$sql .= " WHERE device = :device AND idServer = :idServer";
