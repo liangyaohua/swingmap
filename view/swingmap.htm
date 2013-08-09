@@ -69,7 +69,12 @@
 					<option value="30000" selected>1/30s</option>
 					<option value="60000">1/1min</option>
 				</select>
-				<input id="client" type="text" class="input-small" placeholder="idClient">
+				<?php
+					if(isset($clientMap) && isset($id))
+						echo '<input id="client" type="text" class="input-small" placeholder='.$id.' value='.$id.' disabled>';	
+					else
+						echo '<input id="client" type="text" class="input-small" placeholder="idClient">';
+				?>
 			</div>
 			<button class="btn" id="setMarkers" type="button"><i class="icon-map-marker"></i></button>
 			<div class="btn-group" data-toggle="buttons-radio">
