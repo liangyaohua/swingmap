@@ -19,6 +19,7 @@ var mcOptions = {gridSize: 50, maxZoom: 15};
 var mc; // marker cluster
 
 var latLngBounds;
+var live = true;
 
 // Google Map initialization
 function initialize() {
@@ -83,6 +84,7 @@ function addMarker(User) {
 	var idClient = User.properties.idClient;
 	var idServer = User.properties.idServer;
 	var volume = User.properties.volume;
+	var tag = User.properties.tag;
 	
 	// Create marker
 	var latLng = new google.maps.LatLng(lat,lng);
@@ -102,7 +104,7 @@ function addMarker(User) {
 	diff = timeDiff(diff/1000);
 	
 	// Content of infoWindow
-	var contentString = '<div id="infoWindow"><p class="lead">' + idClient + '</p><p>' + diff + '</p><p>idDevice: ' + idDevice + '</p><p>device: ' + device + '</p><p>idServer: ' + idServer + '</p><p>ip: ' + ip + '</p><p>volume: ' + volume + '</p></div>';
+	var contentString = '<div id="infoWindow"><p class="lead">' + idClient + '' + tag + '</p><p>' + diff + '</p><p>idDevice: ' + idDevice + '</p><p>device: ' + device + '</p><p>idServer: ' + idServer + '</p><p>ip: ' + ip + '</p><p>volume: ' + volume + '</p></div>';
 	
 	bindInfoWindow(marker, map, infoWindow,contentString);
 }
@@ -272,6 +274,8 @@ $(function(){
 		autoRefreshFreq = $("#frequency").val();
 		map_zoom = map.getZoom();
 		
+		var downloadUrl = geojsonUrl + "?device=" + _device + "&server=" + _server + "&interval=" + _interval;
+		
 		var date = new Date();
 		var month = date.getMonth()>=9?(date.getMonth()+1):("0"+(date.getMonth()+1));
 		var day = date.getDate()>=10?date.getDate():("0"+date.getDate());
@@ -280,9 +284,8 @@ $(function(){
 		var second = date.getSeconds()>=10?date.getSeconds():("0"+date.getSeconds());
 		var curtime = date.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
 		var endtime = _datetime==""?curtime:_datetime;
-		
-		var downloadUrl = geojsonUrl + "?device=" + _device + "&server=" + _server + "&interval=" + _interval + "&datetime=" + endtime;
-		
+		if(live == false)
+			downloadUrl += "&datetime=" + endtime;
 		// ajax
 		var xmlhttp;
 		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -309,6 +312,7 @@ $(function(){
 	var IW;
 	// play button start live mode
 	$("#play").click(function(){
+		live = true;
 		$("#datetime").val("");
 		$("#datetimepicker").fadeOut();
 		$("#setMarkers").click();
@@ -326,6 +330,7 @@ $(function(){
 	});
 	// pause button stop live mode
 	$("#pause").click(function(){
+		live = false;
 		clearInterval(AR);
 		clearInterval(IW);
 		$("#datetime").val("");
