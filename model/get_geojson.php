@@ -1,32 +1,40 @@
 <?php
 	include_once('../config.php');
 	
-	function get_geojson($_device, $_server, $_interval, $_datetime) {
+	function get_geojson($_device, $_server, $_interval, $_datetime, $_client) {
 		global $connection, $device_array, $server_array;
 		
-		$sql = "SELECT MAX(m.`time`) AS `time`, MAX(m.`lat`) AS lat_marker, MAX(m.`lng`) AS lng_marker, MAX(cc.`lat`) AS lat_cc, MAX(cc.`lng`) AS lng_cc, MAX(ip.`lat`) AS lat_ip, MAX(ip.`lng`) AS lng_ip, MAX(m.`ip`) AS ip, MAX(m.`device`) AS device, m.`idDevice`, m.`idClient`, MAX(m.`idServer`) AS idServer, SUM(m.`volume`) AS volume FROM `marker` m FORCE INDEX(`time`) LEFT JOIN `client_coordinate` cc ON cc.`idClient`= m.`idClient` LEFT JOIN `ip_coordinate` ip ON ip.`ip`= m.`ip` WHERE `time` BETWEEN DATE_SUB(:datetime, INTERVAL :interval SECOND) AND :datetime GROUP BY m.`idDevice`, m.`idClient`";
+		$sql = "SELECT MAX(m.`time`) AS `time`, MAX(m.`lat`) AS lat_marker, MAX(m.`lng`) AS lng_marker, MAX(cc.`lat`) AS lat_cc, MAX(cc.`lng`) AS lng_cc, MAX(ip.`lat`) AS lat_ip, MAX(ip.`lng`) AS lng_ip, MAX(m.`ip`) AS ip, MAX(m.`device`) AS device, m.`idDevice`, m.`idClient`, MAX(m.`idServer`) AS idServer, SUM(m.`volume`) AS volume FROM `marker` m FORCE INDEX(`time`) LEFT JOIN `client_coordinate` cc ON cc.`idClient`= m.`idClient` LEFT JOIN `ip_coordinate` ip ON ip.`ip`= m.`ip` WHERE `time` BETWEEN DATE_SUB(:datetime, INTERVAL :interval SECOND) AND :datetime";
 		
+		if($_client != "")
+			$sql .= " AND m.`idClient` = :idClient";
+
 		if(in_array($_device, $device_array) && in_array($_server, $server_array)) {
-			$sql .= " WHERE device = :device AND idServer = :idServer";
+			$sql .= " AND device = :device AND idServer = :idServer GROUP BY m.`idDevice`, m.`idClient`";
 			$result = $connection->prepare($sql);
 			$result->bindValue(':device', $_device, PDO::PARAM_STR);
 			$result->bindValue(':idServer', $_server, PDO::PARAM_STR);
 		} else if(in_array($_device, $device_array) && $_server == "") {
-			$sql .= " WHERE device = :device";
+			$sql .= " AND device = :device GROUP BY m.`idDevice`, m.`idClient`";
 			$result = $connection->prepare($sql);
 			$result->bindValue(':device', $_device, PDO::PARAM_STR);
 		} else if($_device == "" && in_array($_server, $server_array)) {
-			$sql .= " WHERE idServer = :idServer";
+			$sql .= " AND idServer = :idServer GROUP BY m.`idDevice`, m.`idClient`";
 			$result = $connection->prepare($sql);
 			$result->bindValue(':idServer', $_server, PDO::PARAM_STR);
 		} else {
+			$sql .= " GROUP BY m.`idDevice`, m.`idClient`";
 			$result = $connection->prepare($sql);
 		}
+		
 		$result->bindValue(':datetime', $_datetime, PDO::PARAM_STR);
 		$result->bindValue(':interval', $_interval, PDO::PARAM_STR);
+		if($_client != "")
+			$result->bindValue(':idClient', $_client, PDO::PARAM_STR);
+	
 		$result->execute();
 		
-		//die(var_dump($result));
+		//die($sql);
 		
 		$result->setFetchMode(PDO::FETCH_OBJ);
 		
