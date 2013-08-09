@@ -270,12 +270,16 @@ $(function(){
 		var _server = $("#server").val();
 		var _interval = $("#interval").val();
 		var _datetime = $("#datetime").val();
+		var _client = $("#client").val();
 		markerStyleOption = $("#markerStyleOption").val();
 		autoRefreshFreq = $("#frequency").val();
 		map_zoom = map.getZoom();
 		
 		var downloadUrl = geojsonUrl + "?device=" + _device + "&server=" + _server + "&interval=" + _interval;
 		
+		if(_client != "")
+			downloadUrl += "&client=" + _client;
+
 		var date = new Date();
 		var month = date.getMonth()>=9?(date.getMonth()+1):("0"+(date.getMonth()+1));
 		var day = date.getDate()>=10?date.getDate():("0"+date.getDate());
@@ -321,7 +325,7 @@ $(function(){
 		AR = autoRefresh();
 		IW = showInfoWindow();
 		// option change trigger
-		$("#device,#server,#markerStyleOption,#interval").change(function(){$("#setMarkers").click()});
+		$("#device,#server,#markerStyleOption,#interval,#client").change(function(){$("#setMarkers").click()});
 		$("#frequency").change(function(){
 			clearInterval(AR);
 			$("#setMarkers").click();
