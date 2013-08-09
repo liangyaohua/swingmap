@@ -270,7 +270,7 @@ $(function(){
 		var _server = $("#server").val();
 		var _interval = $("#interval").val();
 		var _datetime = $("#datetime").val();
-		var _client = $("#client").val();
+		var _client = $.trim($("#client").val());
 		markerStyleOption = $("#markerStyleOption").val();
 		autoRefreshFreq = $("#frequency").val();
 		map_zoom = map.getZoom();
