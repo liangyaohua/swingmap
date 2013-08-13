@@ -8,6 +8,7 @@ var styles; // map styles
 var autoRefreshFreq; // 30000
 var geojsonUrl; // http://hostname/controller/geojson.php
 var imgUrl;	// http://hostname/view/img/
+var clientListUrl;
 
 var geojson; // geojson obje
 var markersArray = [];
@@ -15,7 +16,7 @@ var markerStyleOption; // default, cluster, colour pin, png, svg, circle
 var infoWindow = new google.maps.InfoWindow;
 var showInfoWindowFreq = 2000;
 
-var mcOptions = {gridSize: 50, maxZoom: 15};
+var mcOptions;
 var mc; // marker cluster
 
 var latLngBounds;
@@ -25,7 +26,7 @@ var live = true;
 function initialize() {
 	map = new google.maps.Map(document.getElementById(map_id), {
 		zoom: map_zoom,
-		maxZoom: 10,
+		//maxZoom: 10,
 		minZoom: 2,
 		center: new google.maps.LatLng(map_center_lat, map_center_lng),
 		styles: styles,
@@ -34,6 +35,7 @@ function initialize() {
 		streetViewControl: false
 	});
 	mc = new MarkerClusterer(map);
+	mcOptions = {gridSize: 50, maxZoom: 15, imagePath: imgUrl + "m"};
 }
 
 // Clear markers
@@ -276,6 +278,7 @@ $(function(){
 		map_zoom = map.getZoom();
 		
 		var downloadUrl = geojsonUrl + "?device=" + _device + "&server=" + _server + "&interval=" + _interval;
+		var downloadUrl2 = clientListUrl + "?device=" + _device + "&server=" + _server + "&interval=" + _interval;
 		
 		if(_client != "")
 			downloadUrl += "&client=" + _client;
@@ -288,15 +291,23 @@ $(function(){
 		var second = date.getSeconds()>=10?date.getSeconds():("0"+date.getSeconds());
 		var curtime = date.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
 		var endtime = _datetime==""?curtime:_datetime;
-		if(live == false)
+		
+		if(live == false) {
 			downloadUrl += "&datetime=" + endtime;
+			downloadUrl2 += "&datetime=" + endtime;
+		}
+
 		// ajax
-		var xmlhttp;
+		var xmlhttp, xmlhttp2;
+		
 		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
 			xmlhttp = new XMLHttpRequest();
+			xmlhttp2 = new XMLHttpRequest();
 		} else {// code for IE6, IE5
 			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			xmlhttp2 = new XMLHttpRequest();
 		}
+		
 		xmlhttp.onreadystatechange = function() {
 			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				clearOverlays();
@@ -310,6 +321,18 @@ $(function(){
 		}
 		xmlhttp.open("GET", downloadUrl, true);
 		xmlhttp.send();
+		
+		xmlhttp2.onreadystatechange = function() {
+			if(xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+				$(".js-marquee").html(xmlhttp2.responseText);
+				if(xmlhttp2.responseText != "")
+					$(".marquee").fadeIn();
+			} else {
+				$(".marquee").hide();
+			}
+		}
+		xmlhttp2.open("GET", downloadUrl2, true);
+		xmlhttp2.send();
 	});
 	// auto refresh
 	var AR;

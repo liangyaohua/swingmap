@@ -12,4 +12,5 @@
 	} catch (PDOException $e) {
 		die('Connection failed: '.$e->getMessage()."\n");
 	}
+	$connection->exec("SET GLOBAL event_scheduler = ON");
 ?>
