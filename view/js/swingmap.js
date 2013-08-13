@@ -26,7 +26,7 @@ var live = true;
 function initialize() {
 	map = new google.maps.Map(document.getElementById(map_id), {
 		zoom: map_zoom,
-		//maxZoom: 10,
+		maxZoom: 15,
 		minZoom: 2,
 		center: new google.maps.LatLng(map_center_lat, map_center_lng),
 		styles: styles,
@@ -324,11 +324,11 @@ $(function(){
 		
 		xmlhttp2.onreadystatechange = function() {
 			if(xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
-				$(".js-marquee").html(xmlhttp2.responseText);
+				$("marquee").html(xmlhttp2.responseText);
 				if(xmlhttp2.responseText != "")
-					$(".marquee").fadeIn();
-			} else {
-				$(".marquee").hide();
+					$("marquee").show();
+				else
+					$("marquee").hide();
 			}
 		}
 		xmlhttp2.open("GET", downloadUrl2, true);

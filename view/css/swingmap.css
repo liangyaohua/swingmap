@@ -36,8 +36,3 @@ html, body, #map_canvas {
 #fancybox-button {
 	float: right
 }
-.marquee {
-	width: 100%;
-	overflow: hidden;
-	margin-bottom: 5px
-}
