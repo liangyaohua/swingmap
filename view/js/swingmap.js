@@ -16,10 +16,13 @@ var markerStyleOption; // default, cluster, colour pin, png, svg, circle
 var infoWindow = new google.maps.InfoWindow;
 var showInfoWindowFreq = 2000;
 
+// marker cluster
 var mcOptions;
-var mc; // marker cluster
+var mc; 
 
+// auto fit zoom centre bounds 
 var latLngBounds;
+// if live mode
 var live = true;
 
 // Google Map initialization
@@ -34,8 +37,9 @@ function initialize() {
 		mapTypeControl: true,
 		streetViewControl: false
 	});
+	// marker cluster initialisation
 	mc = new MarkerClusterer(map);
-	mcOptions = {gridSize: 50, maxZoom: 15, imagePath: imgUrl + "m"};
+	mcOptions = {gridSize: 50, maxZoom: 15, imagePath: imgUrl + "swing.pin."};
 }
 
 // Clear markers
@@ -43,9 +47,9 @@ function clearOverlays() {
 	for (var i = 0; i < markersArray.length; i++ ) {
 		markersArray[i].setMap(null);
 	}
-	markersArray = [];
-	mc.clearMarkers();
-	delete latLngBounds;
+	markersArray = []; // clear markers
+	mc.clearMarkers(); // clear cluster
+	delete latLngBounds; // clear bounds
 }
 
 // Loop through the results array and place a marker for each
@@ -60,7 +64,7 @@ function setMarkers(geojson) {
 		if(lat != 0 && lng != 0)
 			addMarker(User);
 	}
-	if(markersArray) {
+	if(markersArray.length > 0) {
 		for(i in markersArray) {
 			markersArray[i].setMap(map);
 		}
@@ -70,7 +74,7 @@ function setMarkers(geojson) {
 		map.fitBounds(latLngBounds);
 		map.setCenter(latLngBounds.getCenter());
 	}
-	
+	// marker cluster style
 	if(markerStyleOption == "cluster")
 		mc = new MarkerClusterer(map, markersArray, mcOptions);
 }
@@ -102,6 +106,7 @@ function addMarker(User) {
 	// push latLng to latLngBounds
 	latLngBounds.extend(latLng);
 	
+	// show time ago
 	var diff = Math.abs(new Date() - new Date(time.replace(/-/g,'/')));
 	diff = timeDiff(diff/1000);
 	
@@ -111,7 +116,7 @@ function addMarker(User) {
 	bindInfoWindow(marker, map, infoWindow,contentString);
 }
 
-// show time ago
+// Show time ago
 function timeDiff(diff) {
 	var day = Math.floor(diff/86400);
 	var hour = Math.floor((diff%86400)/3600);
@@ -160,7 +165,7 @@ function markerStyle(markerStyleOption, device) {
 			return svgMarker(device,map_zoom);
 			break;
 		default:
-			return imgUrl + 'red-dot.png';
+			return imgUrl + 'swing.pin.png'; // default icon
 	}
 }
 
@@ -265,24 +270,33 @@ function getCircle(device,volume) {
 // jQuery code for map control
 $(function(){
 	initialize();
+	$("marquee").hide();
+	
 	// ajax refresh markers
 	$("#setMarkers").click(function(){
 		$("#showtime").hide();
+		
 		var _device = $("#device").val();
 		var _server = $("#server").val();
 		var _interval = $("#interval").val();
 		var _datetime = $("#datetime").val();
 		var _client = $.trim($("#client").val());
+		
 		markerStyleOption = $("#markerStyleOption").val();
 		autoRefreshFreq = $("#frequency").val();
+		
 		map_zoom = map.getZoom();
 		
+		// for markers 
 		var downloadUrl = geojsonUrl + "?device=" + _device + "&server=" + _server + "&interval=" + _interval;
+		// for scrolling client list
 		var downloadUrl2 = clientListUrl + "?device=" + _device + "&server=" + _server + "&interval=" + _interval;
 		
+		// client filter
 		if(_client != "")
 			downloadUrl += "&client=" + _client;
-
+		
+		// get current time
 		var date = new Date();
 		var month = date.getMonth()>=9?(date.getMonth()+1):("0"+(date.getMonth()+1));
 		var day = date.getDate()>=10?date.getDate():("0"+date.getDate());
@@ -290,6 +304,7 @@ $(function(){
 		var minute = date.getMinutes()>=10?date.getMinutes():("0"+date.getMinutes());
 		var second = date.getSeconds()>=10?date.getSeconds():("0"+date.getSeconds());
 		var curtime = date.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+		
 		var endtime = _datetime==""?curtime:_datetime;
 		
 		if(live == false) {
@@ -308,6 +323,7 @@ $(function(){
 			xmlhttp2 = new XMLHttpRequest();
 		}
 		
+		// markers
 		xmlhttp.onreadystatechange = function() {
 			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				clearOverlays();
@@ -322,6 +338,7 @@ $(function(){
 		xmlhttp.open("GET", downloadUrl, true);
 		xmlhttp.send();
 		
+		// client list
 		xmlhttp2.onreadystatechange = function() {
 			if(xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
 				$("marquee").html(xmlhttp2.responseText);
@@ -334,6 +351,7 @@ $(function(){
 		xmlhttp2.open("GET", downloadUrl2, true);
 		xmlhttp2.send();
 	});
+	
 	// auto refresh
 	var AR;
 	var IW;
@@ -355,6 +373,7 @@ $(function(){
 			AR = autoRefresh();
 		});
 	});
+	
 	// pause button stop live mode
 	$("#pause").click(function(){
 		live = false;
@@ -363,11 +382,13 @@ $(function(){
 		$("#datetime").val("");
 		$("#datetimepicker").fadeOut();
 	});
+	
 	// playback button see the history recode
 	$("#backward").click(function(){
 		$("#pause").click();
 		$("#datetimepicker").fadeIn();
 	});
+	
 	// map control bar
 	$("#map_control").hide();
 	$("#show_control").click(function(){
@@ -382,12 +403,14 @@ $(function(){
 			$("html,body,#map_canvas").css("overflow","hidden");
 		}
 	});
+	
 	// date time picker
 	$('#datetimepicker').datetimepicker({
 		language: 'en'
 	});
 	$("#datetimepicker").hide();
 });
+
 // auto refresh function
 function autoRefresh() {
 	return setInterval(function(){$("#setMarkers").click()},autoRefreshFreq);

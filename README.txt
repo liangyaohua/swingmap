@@ -1,14 +1,15 @@
-SwingMap V1.0
+SwingMap
 -------------
 swingmap
 	- index.php			
 	- config.php		// parameters configuration
-	- addMarkers.php	// add markers api
+	- addMarkers.php	// api
 	- swingchart.php	// statistics chart
 	- clientGPS.php		// clientGPS editable
+	- clientMap.php		// open map for client
 	- model
 		- db_connection.php		// database connection
-		- get_geojson.php		// function of generating the geojson object
+		- get_geojson.php		// function for generating the geojson object
 		- get_total_device.php	// get statistic data
 		- get_clientGPS			// get client coordinate table
 	- view
@@ -28,11 +29,12 @@ swingmap
 			- bootstrap.min.css
 			- bootstrap-datetimepicker.min.css
 		- img
-		- fancybox	//fancybox lib
+		- fancybox	// fancybox lib
 	- controller
 		- geojson.php
 		- getClientGPS.php
 		- addClientGPS.php
+		- clientList.php	// for the scrolling client list	
 		- getList.php
 		- request.php	// for update and delete client_coordinate table
 	- simulator
@@ -55,5 +57,8 @@ Test:
 3.	API addMarkers.php?data=[{"time":"2013-07-11 10:10:10","ip":"123.45.67.89","lat":0,"lng":0,"device":"ios","idDevice":"ios6455","idClient":"SW54454A","idServer":"A","volume":354},...]
 
 DEMO: http://www.liangyaohua.com/swingmap
+GitHub: https://github.com/liangyaohua/swingmap
+
+For the further development, you can fork the project from my github page, and submit your modification, so that I can see the changes.
 	
 Any questions, please email to yliang@swingmobility.com or alex19891013@gmail.com

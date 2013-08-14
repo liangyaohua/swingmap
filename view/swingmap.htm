@@ -13,7 +13,9 @@
 	</head>
 	<body>
 		<div id="show_control"><i id="arrow" class="icon-chevron-down"></i></div>
-		<marquee width="100%" height="20"></marquee>
+		
+		<marquee width="100%" height="20" scrolldelay="1" scrollamount="1"></marquee>
+		
 		<div id="map_control">
 			<div id="info" class="alert alert-info">
 				Chose a interval to see the active users in this period [time-interval,time].
@@ -21,9 +23,12 @@
 					if($simulator == true)
 						echo "<div>You can also click <a href='".HOST."/simulator' target='_blank'>here</a> to simulate new datas.</div>";
 				?>
-				<div><i class="icon-map-marker"></i> setMarkers/refresh <i class="icon-play"></i> start live mode <i class="icon-pause"></i> stop live mode <i class="icon-backward"></i> look back</div>
+				<div>
+					<i class="icon-map-marker"></i> setMarkers/refresh <i class="icon-play"></i> start live mode <i class="icon-pause"></i> stop live mode <i class="icon-backward"></i> look back
+				</div>
 				<div><span id="result"></span><span id="showtime"></span></div>
 			</div>
+			
 			<div id="options">
 				Device: 
 				<select id="device" class="input-small">
@@ -77,22 +82,27 @@
 						echo '<input id="client" type="text" class="input-small" placeholder="idClient">';
 				?>
 			</div>
+			
 			<button class="btn" id="setMarkers" type="button"><i class="icon-map-marker"></i></button>
+			
 			<div class="btn-group" data-toggle="buttons-radio">
 				<button class="btn btn-info" id="backward" type="button"><i class="icon-backward"></i></button>
 				<button class="btn btn-success" id="play" type="button"><i class="icon-play"></i></button>
 				<button class="btn btn-warning" id="pause" type="button"><i class="icon-pause"></i></button>
 			</div>
+			
 			<div id="datetimepicker" class="input-append">
 				<input id="datetime" data-format="yyyy-MM-dd hh:mm:ss" type="text"></input>
 				<span class="add-on">
 					<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 				</span>
 			</div>
+			
 			<a id="fancybox-button" href="<?php echo HOST; ?>/swingchart.php">
                 <button class="btn" type="button"><i class="icon-signal"></i></button>
             </a>
 		</div>
+		
 		<div id="map_canvas"></div>
 	</body>
 	<script
@@ -104,7 +114,6 @@
 	<script type="text/javascript" src="<?php echo HOST;?>/view/fancybox/jquery.fancybox.js"></script>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/markercluster.js"></script>
 	<script type="text/javascript" src="<?php echo HOST;?>/view/js/swingmap.js"></script>
-
 	<script type="text/javascript">
 		google.maps.visualRefresh = true;
 		// parameters initialization 
@@ -113,6 +122,7 @@
 		var map_zoom = 6;
 		var map_center_lat = 48.583;
 		var map_center_lng = 7.750;
+		// map style
 		var styles = [
 		{
 			stylers: [
@@ -154,9 +164,16 @@
 		
 		$(document).ready(function() {
 			$('#play').click();
+			
 			$("#fancybox-button").fancybox({
 				'width'	: 500,
 				'type'	: 'iframe'
+			});
+			// scrolling client list pause on hover
+			$('marquee').mouseover(function() {
+			    $(this).attr('scrollamount',0);
+			}).mouseout(function() {
+			    $(this).attr('scrollamount',1);
 			});
 		});
 	</script>

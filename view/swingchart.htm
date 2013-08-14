@@ -116,7 +116,7 @@
 				tooltip: {
 					formatter: function() {
 						var point = this.point,
-						s = ((this.y/total)*100).toFixed(2) +'%';
+						s = ((this.y/total)*100).toFixed(2) +'%'; // percentage indicator
 						if (!point.drilldown) {	
 							s = ((this.y/total_device[this.series.name])*100).toFixed(2) +'%';
 						}

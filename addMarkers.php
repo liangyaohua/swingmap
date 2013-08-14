@@ -33,18 +33,18 @@
 	$query = substr($query,0,-2); // remove the last comma
 	//die($query);
 	
-	try {
-		$result = $connection->exec($query);
-		if($result)
-			echo "Insertion success: ".$result." messages<br>";
+	$result = $connection->exec($query);
+
+	if($result) {
+		echo "success: ".$result." markers added<br>";
 		if(sizeof($fail) > 0) {
-			echo "Failed: please check if the following message is correct"."<br>";
+			echo "failed: please check if the following message is correct"."<br>";
 			foreach($fail as $value) {
 				echo "message ".$value.": ".json_encode($markersArray[$value])."<br>";
 			}
 		}
-	} catch (PDOException $e) {
-		die('Insertion failed: '.$e->getMessage()."\n");
+	} else {
+		die("add markers failed");
 	}
 	$connection = null;
 ?>

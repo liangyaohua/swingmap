@@ -1,7 +1,7 @@
 <?php
 	include_once('../model/db_connection.php');
 	
-	$cmd = (isset($_GET['cmd'])&&($_GET['cmd']!=''))?$_GET['cmd']:'delete';
+	$cmd = (isset($_GET['cmd'])&&($_GET['cmd']!=''))?$_GET['cmd']:'delete'; // delete or update
 	$idClient = isset($_GET['client'])?$_GET['client']:'';
 	
 	if($cmd == 'delete') {

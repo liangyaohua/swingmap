@@ -43,7 +43,7 @@
 		while ($row = $result->fetch()) {
 			$lat = $row->lat_marker;
 			$lng = $row->lng_marker;
-			$tag = "";
+			$tag = ""; // gps source indcator
 			// if gps not exist, idClient to gps, ip to gps
 			if((float)$lat == 0 && (float)$lng == 0) { 
 				if($row->lat_cc != NULL && $row->lng_cc != NULL) {
@@ -98,7 +98,7 @@
 			return false;
 		}
 	}
-	/* if file_get_contents function is off
+	/* for use if file_get_contents function is off
 	function ip_geocoding($ip) {
 		$query = get_data('http://ip-api.com/json/'.$ip.'?fields=lat,lon,status');
 		$query = json_decode($query);
