@@ -17,7 +17,7 @@
 		<marquee width="100%" height="20" scrolldelay="1" scrollamount="1"></marquee>
 		
 		<div id="map_control">
-			<div id="info" class="alert alert-info">
+			<div id="info" class="alert alert-<?php if($style == "s2") echo "warning"; else echo "info"; ?>">
 				Chose a interval to see the active users in this period [time-interval,time].
 				<?php 
 					if($simulator == true)
