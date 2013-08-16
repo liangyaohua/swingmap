@@ -9,6 +9,7 @@ var autoRefreshFreq; // 30000
 var geojsonUrl; // http://hostname/controller/geojson.php
 var imgUrl;	// http://hostname/view/img/
 var clientListUrl;
+var iconStyle;
 
 var geojson; // geojson obje
 var markersArray = [];
@@ -39,7 +40,7 @@ function initialize() {
 	});
 	// marker cluster initialisation
 	mc = new MarkerClusterer(map);
-	mcOptions = {gridSize: 50, maxZoom: 15, imagePath: imgUrl + "swing.pin."};
+	mcOptions = {gridSize: 50, maxZoom: 15, imagePath: imgUrl + ((iconStyle == "s2")?'swing.pin.':'m')};
 }
 
 // Clear markers
@@ -165,7 +166,7 @@ function markerStyle(markerStyleOption, device) {
 			return svgMarker(device,map_zoom);
 			break;
 		default:
-			return imgUrl + 'swing.pin.png'; // default icon
+			return imgUrl + ((iconStyle == "s2")?'swing.pin.png':'red-dot.png'); // default icon
 	}
 }
 

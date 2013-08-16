@@ -79,7 +79,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    */
   this.clusters_ = [];
 
-  this.sizes = [110, 142, 181, 237, 237];
+  this.sizes = [53, 56, 66, 78, 90];
 
   /**
    * @private
