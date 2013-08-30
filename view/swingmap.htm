@@ -18,10 +18,11 @@
 		
 		<div id="map_control">
 			<div id="info" class="alert alert-<?php if($style == "s2") echo "warning"; else echo "info"; ?>">
-				Chose a interval to see the active users in this period [time-interval,time].
+				This is a demo of my intership project <a href="http://www.swingmobility.com">@SwingMobility</a>, for dynamically displaying their mobile users’ activities on GoogleMap.<br>
+				The realtime datas are only available in their local network,
 				<?php 
 					if($simulator == true)
-						echo "<div>You can also click <a href='".HOST."/simulator' target='_blank'>here</a> to simulate new datas.</div>";
+						echo " you can click <a href='".HOST."/simulator' target='_blank'>here</a> to simulate new users.";
 				?>
 				<div>
 					<i class="icon-map-marker"></i> setMarkers/refresh <i class="icon-play"></i> start live mode <i class="icon-pause"></i> stop live mode <i class="icon-backward"></i> look back
